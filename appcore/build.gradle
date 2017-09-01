@@ -28,6 +28,7 @@ dependencies {
     final rxAndroidVersion = '2.0.1'
     final retrofit2Version = '2.3.0'
     final gsonVersion = '2.8.1'
+    final okHttp3Version = '3.8.1'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -42,4 +43,6 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit2Version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit2Version"
     compile "com.google.code.gson:gson:$gsonVersion"
+    compile "com.squareup.okhttp3:okhttp:$okHttp3Version"
+    compile "com.squareup.okhttp3:logging-interceptor:$okHttp3Version"
 }
