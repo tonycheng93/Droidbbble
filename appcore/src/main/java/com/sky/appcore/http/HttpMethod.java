@@ -3,10 +3,14 @@ package com.sky.appcore.http;
 import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -17,11 +21,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 /**
- * must implements this class
+ * must extends this class
  */
 
-public abstract class HttpMethod {
+public abstract class HttpMethod<T> {
 
+    private T mService = null;
     private static final int CONNECT_TIME_OUT = 10;
     private static final int READ_TIME_OUT = 10;
     private static final int WRITE_TIME_OUT = 10;
@@ -29,36 +34,53 @@ public abstract class HttpMethod {
     private Map<String, Object> mServiceCache = new ArrayMap<>();
 
     @NonNull
+    protected abstract Class<T> getServiceClazz();
+
+    @NonNull
     protected abstract String getBaseUrl();
 
-    @SuppressWarnings("unchecked")
-    public <T> T getService(@NonNull Class<T> service) {
-        if (mServiceCache.containsKey(service.getName())) {
-            return (T) mServiceCache.get(service.getName());
-        } else {
-            final T serviceClass = createService(service);
-            mServiceCache.put(service.getName(), serviceClass);
-            return serviceClass;
-        }
-    }
+    protected abstract Map<String, String> getHeaders();
 
-    private <T> T createService(Class<T> serviceClass) {
+    public HttpMethod() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .client(createOkHttpClient())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        return (T) retrofit.create(serviceClass);
+        mService = retrofit.create(getServiceClazz());
+    }
+
+    @SuppressWarnings("unchecked")
+    public T getService() {
+        if (mServiceCache.containsKey(getServiceClazz().getName())) {
+            return (T) mServiceCache.get(getServiceClazz().getName());
+        } else {
+            mServiceCache.put(getServiceClazz().getName(), getServiceClazz());
+            return mService;
+        }
     }
 
     private OkHttpClient createOkHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
-                .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
-                .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(true)
-                .addInterceptor(new HttpLoggingInterceptor());
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS);
+        builder.readTimeout(READ_TIME_OUT, TimeUnit.SECONDS);
+        builder.writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS);
+        builder.retryOnConnectionFailure(true);
+        final Map<String, String> headers = getHeaders();
+        if (headers != null) {
+            builder.addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request.Builder requestBuilder = chain.request().newBuilder();
+                    for (Map.Entry<String, String> entry : headers.entrySet()) {
+                        requestBuilder.addHeader(entry.getKey(), entry.getValue());
+                    }
+                    return chain.proceed(requestBuilder.build());
+                }
+            });
+        }
+        builder.addInterceptor(new HttpLoggingInterceptor());
         return builder.build();
     }
 }
