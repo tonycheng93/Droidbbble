@@ -1,7 +1,7 @@
 package com.sky.appcore.http;
 
 import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
+import android.support.v4.BuildConfig;
 
 import java.io.IOException;
 import java.util.Map;
@@ -26,12 +26,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class HttpMethod<T> {
 
-    private T mService = null;
     private static final int CONNECT_TIME_OUT = 10;
     private static final int READ_TIME_OUT = 10;
     private static final int WRITE_TIME_OUT = 10;
 
-    private Map<String, Object> mServiceCache = new ArrayMap<>();
+    private T mService = null;
 
     @NonNull
     protected abstract Class<T> getServiceClazz();
@@ -53,12 +52,7 @@ public abstract class HttpMethod<T> {
 
     @SuppressWarnings("unchecked")
     public T getService() {
-        if (mServiceCache.containsKey(getServiceClazz().getName())) {
-            return (T) mServiceCache.get(getServiceClazz().getName());
-        } else {
-            mServiceCache.put(getServiceClazz().getName(), getServiceClazz());
-            return mService;
-        }
+        return mService;
     }
 
     private OkHttpClient createOkHttpClient() {
@@ -71,7 +65,7 @@ public abstract class HttpMethod<T> {
         if (headers != null) {
             builder.addInterceptor(new Interceptor() {
                 @Override
-                public Response intercept(Chain chain) throws IOException {
+                public Response intercept(@NonNull Chain chain) throws IOException {
                     Request.Builder requestBuilder = chain.request().newBuilder();
                     for (Map.Entry<String, String> entry : headers.entrySet()) {
                         requestBuilder.addHeader(entry.getKey(), entry.getValue());
@@ -80,7 +74,11 @@ public abstract class HttpMethod<T> {
                 }
             });
         }
-        builder.addInterceptor(new HttpLoggingInterceptor());
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(loggingInterceptor);
+        }
         return builder.build();
     }
 }
