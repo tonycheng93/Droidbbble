@@ -1,6 +1,5 @@
 package com.sky.appcore.http;
 
-import android.support.annotation.NonNull;
 import android.support.v4.BuildConfig;
 
 import java.io.IOException;
@@ -32,10 +31,8 @@ public abstract class HttpMethod<T> {
 
     private T mService = null;
 
-    @NonNull
     protected abstract Class<T> getServiceClazz();
 
-    @NonNull
     protected abstract String getBaseUrl();
 
     protected abstract Map<String, String> getHeaders();
@@ -65,7 +62,7 @@ public abstract class HttpMethod<T> {
         if (headers != null) {
             builder.addInterceptor(new Interceptor() {
                 @Override
-                public Response intercept(@NonNull Chain chain) throws IOException {
+                public Response intercept(Chain chain) throws IOException {
                     Request.Builder requestBuilder = chain.request().newBuilder();
                     for (Map.Entry<String, String> entry : headers.entrySet()) {
                         requestBuilder.addHeader(entry.getKey(), entry.getValue());

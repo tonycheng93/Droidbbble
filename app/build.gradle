@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.sky.dribbble"
+        applicationId "com.sky.driodbbble"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
@@ -21,24 +22,29 @@ android {
 
 dependencies {
 
-    final supportLibrary = '25.3.1'
+    final supportLibraryVersion = '25.3.1'
     final architectureComponentsVersion = '1.0.0-alpha9'
+    final timberVersion = '4.5.1'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:$supportLibrary"
-    compile "com.android.support:design:$supportLibrary"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile "com.android.support:cardview-v7:$supportLibrary"
-    compile "com.android.support:recyclerview-v7:$supportLibrary"
+    compile "com.android.support:cardview-v7:$supportLibraryVersion"
 
-    compile "android.arch.persistence.room:runtime:$architectureComponentsVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$architectureComponentsVersion"
-    compile "android.arch.persistence.room:rxjava2:$architectureComponentsVersion"
+//    compile "android.arch.persistence.room:runtime:$architectureComponentsVersion"
+//    annotationProcessor "android.arch.persistence.room:compiler:$architectureComponentsVersion"
+//    compile "android.arch.persistence.room:rxjava2:$architectureComponentsVersion"
 
     compile project(':appcore')
     compile project(':imageloader')
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+
+    compile "com.jakewharton.timber:timber:$timberVersion"
 }

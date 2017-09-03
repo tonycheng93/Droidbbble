@@ -1,6 +1,5 @@
 package com.sky.dribbble.http;
 
-import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
 import com.sky.appcore.http.HttpMethod;
@@ -13,13 +12,11 @@ import java.util.Map;
 
 public class DribbbleHttpMethod extends HttpMethod<DribbbleHttpService> {
 
-    @NonNull
     @Override
     protected Class<DribbbleHttpService> getServiceClazz() {
         return DribbbleHttpService.class;
     }
 
-    @NonNull
     @Override
     protected String getBaseUrl() {
         return null;
