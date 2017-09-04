@@ -9,12 +9,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.sky.dribbble.data.model.User;
+import com.sky.dribbble.ui.user.IUserView;
+import com.sky.dribbble.ui.user.UserPresenter;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IUserView {
+
+    private static final String TAG = "MainActivity";
+
+    private ImageView mAvatarImageView;
+    private UserPresenter mUserPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +52,15 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        mAvatarImageView = (ImageView) findViewById(R.id.imageView);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Timber.d("onCreate()");
+        mUserPresenter = new UserPresenter();
+        mUserPresenter.attachView(this);
+        mUserPresenter.getUser();
     }
 
     @Override
@@ -97,5 +118,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showUser(User user) {
+        Toast.makeText(MainActivity.this,user.toString(),Toast.LENGTH_SHORT).show();
+        if (user != null) {
+            final String avatarUrl = user.getAvatarUrl();
+            if (!TextUtils.isEmpty(avatarUrl)) {
+                Timber.d("the user avatar image url is " + avatarUrl);
+            }
+        }
     }
 }
