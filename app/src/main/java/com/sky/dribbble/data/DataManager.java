@@ -1,7 +1,7 @@
 package com.sky.dribbble.data;
 
 import com.sky.dribbble.data.model.User;
-import com.sky.dribbble.http.DribbbleHttpMethod;
+import com.sky.dribbble.http.DroidbbbleHttpMethod;
 
 import io.reactivex.Observable;
 
@@ -26,7 +26,7 @@ public class DataManager {
     }
 
     public Observable<User> getUser() {
-        return DribbbleHttpMethod.getInstance()
+        return DroidbbbleHttpMethod.getInstance()
                 .getUser();
     }
 }

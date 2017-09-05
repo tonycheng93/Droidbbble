@@ -15,22 +15,22 @@ import io.reactivex.schedulers.Schedulers;
  * Created by tonycheng on 2017/9/1.
  */
 
-public class DribbbleHttpMethod extends HttpMethod<DribbbleHttpService> {
+public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleHttpService> {
 
-    private DribbbleHttpMethod() {
+    private DroidbbbleHttpMethod() {
     }
 
     private static class SingletonHolder {
-        private static final DribbbleHttpMethod INSTANCE = new DribbbleHttpMethod();
+        private static final DroidbbbleHttpMethod INSTANCE = new DroidbbbleHttpMethod();
     }
 
-    public static DribbbleHttpMethod getInstance() {
+    public static DroidbbbleHttpMethod getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
     @Override
-    protected Class<DribbbleHttpService> getServiceClazz() {
-        return DribbbleHttpService.class;
+    protected Class<DroidbbbleHttpService> getServiceClazz() {
+        return DroidbbbleHttpService.class;
     }
 
     @Override

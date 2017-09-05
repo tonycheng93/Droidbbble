@@ -9,7 +9,7 @@ import retrofit2.http.GET;
  * Created by tonycheng on 2017/9/1.
  */
 
-public interface DribbbleHttpService {
+public interface DroidbbbleHttpService {
 
     /**
      * get current user

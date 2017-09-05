@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Timber.d("onCreate()");
-        mUserPresenter = new UserPresenter();
-        mUserPresenter.attachView(this);
-        mUserPresenter.getUser();
+//        mUserPresenter = new UserPresenter();
+//        mUserPresenter.attachView(this);
+//        mUserPresenter.getUser();
     }
 
     @Override

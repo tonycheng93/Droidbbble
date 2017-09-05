@@ -18,7 +18,7 @@ import timber.log.Timber;
  * 修改备注：
  */
 
-public class DribbbleApp extends Application {
+public class DroidbbbleApp extends Application {
 
     @Override
     public void onCreate() {
