@@ -89,11 +89,13 @@ public abstract class HttpMethod<T> {
                 }
             });
         }
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(loggingInterceptor);
+        } else {
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         }
+        builder.addInterceptor(loggingInterceptor);
         return builder.build();
     }
 }
