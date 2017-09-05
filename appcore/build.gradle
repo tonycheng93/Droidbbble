@@ -45,4 +45,10 @@ dependencies {
     compile "com.google.code.gson:gson:$gsonVersion"
     compile "com.squareup.okhttp3:okhttp:$okHttp3Version"
     compile "com.squareup.okhttp3:logging-interceptor:$okHttp3Version"
+
+    /*javax.net.ssl.SSLHandshakeException: javax.net.ssl.SSLProtocolException:
+    SSL handshake aborted: ssl=0x5312e5a0: Failure in SSL library, usually a protocol error
+    error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version
+    (external/openssl/ssl/s23_clnt.c:741 0x517bcce4:0x00000000)*/
+//    compile 'info.guardianproject.netcipher:netcipher:1.2'
 }
