@@ -45,11 +45,13 @@ public class UserPresenter extends BasePresenter<IUserView> {
 
                     @Override
                     public void onNext(@NonNull User user) {
+                        Timber.d("onNext() current thread  = " + Thread.currentThread().getName());
                         getMvpView().showUser(user);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        Timber.d("onError current thread  = " + Thread.currentThread());
                         Timber.e("onError = " + e.toString());
                     }
 

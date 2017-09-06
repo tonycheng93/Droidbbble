@@ -8,7 +8,19 @@ import com.sky.imageloader.glide.GlideImageLoader;
 
 public class ImageLoaderFactory {
 
-    public static IImageLoader getImageLoader() {
-        return GlideImageLoader.getInstance();
+    private static IImageLoader sImageLoader = null;
+
+    public synchronized static IImageLoader getImageLoader() {
+        if (sImageLoader == null) {
+            sImageLoader = new GlideImageLoader();
+        }
+        return sImageLoader;
+    }
+
+    public synchronized static void destroy() {
+        if (sImageLoader != null) {
+            sImageLoader.destroy();
+        }
+        sImageLoader = null;
     }
 }

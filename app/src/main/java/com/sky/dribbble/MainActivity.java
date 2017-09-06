@@ -14,13 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
 
-import timber.log.Timber;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IUserView {
@@ -52,15 +53,21 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mAvatarImageView = (ImageView) findViewById(R.id.imageView);
+        mAvatarImageView = (ImageView) findViewById(R.id.test_image);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Timber.d("onCreate()");
-//        mUserPresenter = new UserPresenter();
-//        mUserPresenter.attachView(this);
-//        mUserPresenter.getUser();
+        Observable.just(1)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        mUserPresenter = new UserPresenter();
+                        mUserPresenter.attachView(MainActivity.this);
+                        mUserPresenter.getUser();
+                    }
+                });
     }
 
     @Override
@@ -122,12 +129,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showUser(User user) {
-        Toast.makeText(MainActivity.this,user.toString(),Toast.LENGTH_SHORT).show();
-        if (user != null) {
-            final String avatarUrl = user.getAvatarUrl();
-            if (!TextUtils.isEmpty(avatarUrl)) {
-                Timber.d("the user avatar image url is " + avatarUrl);
-            }
+        if (user == null) {
+            return;
+        }
+        final String avatarUrl = user.getAvatarUrl();
+        if (!TextUtils.isEmpty(avatarUrl)) {
+
         }
     }
 }
