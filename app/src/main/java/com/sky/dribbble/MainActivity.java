@@ -1,5 +1,6 @@
 package com.sky.dribbble;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
+import com.sky.imageloader.ImageLoaderFactory;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
@@ -134,7 +136,19 @@ public class MainActivity extends AppCompatActivity
         }
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-
+            ImageLoaderFactory.getImageLoader()
+                    .with(this)
+                    .load(Uri.parse(avatarUrl))
+                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
+                    .override(100,100)
+                    .roundCorner(8)
+                    .into(mAvatarImageView);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageLoaderFactory.destroy();
     }
 }

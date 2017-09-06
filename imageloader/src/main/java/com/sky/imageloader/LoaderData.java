@@ -33,6 +33,8 @@ public class LoaderData {
 
     private int radius = 0;
 
+    private int roundCornerRadius = 0;
+
     public Context getContext() {
         return mContext;
     }
@@ -119,5 +121,13 @@ public class LoaderData {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public int getRoundCornerRadius() {
+        return roundCornerRadius;
+    }
+
+    public void setRoundCornerRadius(int roundCornerRadius) {
+        this.roundCornerRadius = roundCornerRadius;
     }
 }

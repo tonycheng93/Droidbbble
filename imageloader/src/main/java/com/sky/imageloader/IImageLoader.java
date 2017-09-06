@@ -105,6 +105,13 @@ public interface IImageLoader {
     IImageLoader circle(int radius);
 
     /**
+     * 设置图片圆角
+     * @param radius 圆角半径
+     * @return IImageLoader
+     */
+    IImageLoader roundCorner(int radius);
+
+    /**
      * 设置需要设置图片的目标 imageView {@link ImageView}
      *
      * @param imageView {@link ImageView}

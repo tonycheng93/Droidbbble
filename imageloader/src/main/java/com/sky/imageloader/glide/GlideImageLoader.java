@@ -95,39 +95,52 @@ public class GlideImageLoader implements IImageLoader {
     }
 
     @Override
+    public IImageLoader roundCorner(int radius) {
+        mLoaderData.setRoundCornerRadius(radius);
+        return this;
+    }
+
+    @Override
     public IImageLoader into(ImageView imageView) {
-        RequestOptions options;
+        RequestOptions options = new RequestOptions();
 
-        if (mLoaderData.getRadius() != 0) {
-            options = RequestOptions.bitmapTransform(new CircleTransform(mLoaderData.getRadius()));
-        } else {
-            options = new RequestOptions();
-        }
-
+        //设置占位图
         if (mLoaderData.getPlaceholderResId() != 0) {
             options.placeholder(mLoaderData.getResourceId());
         }
+        //设置加载出错占位图
         if (mLoaderData.getErrorPlaceholderResId() != 0) {
             options.error(mLoaderData.getErrorPlaceholderResId());
         }
+        //剪裁图片大小
         if (mLoaderData.getWidth() != 0 && mLoaderData.getHeight() != 0) {
             options.override(mLoaderData.getWidth(), mLoaderData.getHeight());
         }
+        //设置图片ScaleType
         if (mLoaderData.getScaleType() != null) {
             switch (mLoaderData.getScaleType()) {
                 case FIT_CENTER:
-                    options.fitCenter();
+                    options.optionalFitCenter();
                     break;
                 case CENTER_CROP:
-                    options.centerCrop();
+                    options.optionalCenterCrop();
                     break;
                 case CENTER_INSIDE:
-                    options.centerInside();
+                    options.optionalCenterInside();
                     break;
                 default:
-                    options.fitCenter();
+                    options.optionalFitCenter();
                     break;
             }
+        }
+        //设置图片圆角
+        if (mLoaderData.getRoundCornerRadius() != 0) {
+            options.override(mLoaderData.getWidth(), mLoaderData.getHeight())
+                    .optionalTransform(new RoundCornerTransform(mLoaderData.getRoundCornerRadius()));
+        }
+        //设置圆形图片
+        if (mLoaderData.getRadius() != 0) {
+            options.optionalTransform(new CircleTransform(mLoaderData.getRadius()));
         }
 
         GlideApp.with(mLoaderData.getContext())
