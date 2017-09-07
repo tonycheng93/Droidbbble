@@ -106,10 +106,35 @@ public interface IImageLoader {
 
     /**
      * 设置图片圆角
+     *
      * @param radius 圆角半径
      * @return IImageLoader
      */
     IImageLoader roundCorner(int radius);
+
+    /**
+     * 高斯模糊，传入的参数blurRadius为模糊度,越大就越模糊,实际效果要自己调试好相应的数字
+     *
+     * @param blurRadius 模糊度
+     * @return IImageLoader
+     */
+    IImageLoader blur(int blurRadius);
+
+    /**
+     * 灰度处理
+     *
+     * @param needGray 是否需要灰度处理
+     * @return IImageLoader
+     */
+    IImageLoader gray(boolean needGray);
+
+    /**
+     * 滤镜处理
+     *
+     * @param color 滤镜颜色
+     * @return IImageLoader
+     */
+    IImageLoader colorFilter(int color);
 
     /**
      * 设置需要设置图片的目标 imageView {@link ImageView}

@@ -35,6 +35,12 @@ public class LoaderData {
 
     private int roundCornerRadius = 0;
 
+    private int blurRadius = 0;
+
+    private boolean gray = false;
+
+    private int colorFilter = 0;
+
     public Context getContext() {
         return mContext;
     }
@@ -129,5 +135,29 @@ public class LoaderData {
 
     public void setRoundCornerRadius(int roundCornerRadius) {
         this.roundCornerRadius = roundCornerRadius;
+    }
+
+    public int getBlurRadius() {
+        return blurRadius;
+    }
+
+    public void setBlurRadius(int blurRadius) {
+        this.blurRadius = blurRadius;
+    }
+
+    public boolean isGray() {
+        return gray;
+    }
+
+    public void setGray(boolean gray) {
+        this.gray = gray;
+    }
+
+    public int getColorFilter() {
+        return colorFilter;
+    }
+
+    public void setColorFilter(int colorFilter) {
+        this.colorFilter = colorFilter;
     }
 }

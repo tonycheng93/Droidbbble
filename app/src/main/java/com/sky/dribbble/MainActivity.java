@@ -16,10 +16,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.MultiTransformation;
 import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
 import com.sky.imageloader.ImageLoaderFactory;
+import com.sky.imageloader.glide.GlideApp;
+import com.sky.imageloader.glide.transformations.ColorFilterTransformation;
+import com.sky.imageloader.glide.transformations.CropCircleTransformation;
+import com.sky.imageloader.glide.transformations.GrayscaleTransformation;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
@@ -136,12 +141,21 @@ public class MainActivity extends AppCompatActivity
         }
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-            ImageLoaderFactory.getImageLoader()
-                    .with(this)
-                    .load(Uri.parse(avatarUrl))
-                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
-                    .override(100,100)
-                    .roundCorner(8)
+            final String url = "https://cdn.dribbble.com/users/63407/screenshots/3780917/dribbble_aloe_vera_bloom.png";
+//            ImageLoaderFactory.getImageLoader()
+//                    .with(this)
+//                    .load(Uri.parse(url))
+//                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
+//                    .override(200,200)
+////                    .blur(12)
+//                    .gray(true)
+//                    .roundCorner(8)
+//                    .into(mAvatarImageView);
+            GlideApp.with(this)
+                    .load(avatarUrl)
+                    .centerCrop()
+                    .transform(new MultiTransformation<>(new ColorFilterTransformation(this,R.color.colorAccent),
+                            new CropCircleTransformation(this)))
                     .into(mAvatarImageView);
         }
     }

@@ -1,8 +1,4 @@
-package com.sky.imageloader.glide;
-
-/**
- * Created by tonycheng on 2017/9/6.
- */
+package com.sky.imageloader.glide.transformations;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -14,28 +10,29 @@ import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import java.security.MessageDigest;
 
 /**
- * 实现圆形图片
+ * Created by tonycheng on 2017/9/6.
  */
-public class CircleTransform extends BitmapTransformation {
+
+public class RoundCornerTransform extends BitmapTransformation {
 
     private static final int VERSION = 1;
-    private static final String ID = "com.bumptech.glide.load.resource.bitmap.CircleCrop." + VERSION;
+    private static final String ID = "com.sky.imageloader.glide.transformations.roundcornertransform." + VERSION;
     private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
 
     private final int radius;
 
-    public CircleTransform(int radius) {
+    public RoundCornerTransform(int radius) {
         this.radius = radius;
     }
 
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
-        return TransformationUtils.circleCrop(pool, toTransform, radius, radius);
+        return TransformationUtils.roundedCorners(pool, toTransform, outWidth, outHeight, radius);
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof CircleTransform;
+        return o instanceof RoundCornerTransform;
     }
 
     @Override

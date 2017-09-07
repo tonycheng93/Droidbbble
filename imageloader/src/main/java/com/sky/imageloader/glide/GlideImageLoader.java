@@ -1,13 +1,27 @@
 package com.sky.imageloader.glide;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CenterInside;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import com.sky.imageloader.IImageLoader;
 import com.sky.imageloader.LoaderData;
+import com.sky.imageloader.glide.transformations.BlurTransformation;
+import com.sky.imageloader.glide.transformations.ColorFilterTransformation;
+import com.sky.imageloader.glide.transformations.CropCircleTransformation;
+import com.sky.imageloader.glide.transformations.GrayscaleTransformation;
+import com.sky.imageloader.glide.transformations.RoundCornerTransform;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tonycheng on 2017/8/31.
@@ -101,8 +115,27 @@ public class GlideImageLoader implements IImageLoader {
     }
 
     @Override
+    public IImageLoader blur(int blurRadius) {
+        mLoaderData.setBlurRadius(blurRadius);
+        return this;
+    }
+
+    @Override
+    public IImageLoader gray(boolean needGray) {
+        mLoaderData.setGray(needGray);
+        return this;
+    }
+
+    @Override
+    public IImageLoader colorFilter(int color) {
+        mLoaderData.setColorFilter(color);
+        return this;
+    }
+
+    @Override
     public IImageLoader into(ImageView imageView) {
         RequestOptions options = new RequestOptions();
+        List<Transformation<Bitmap>> transformations = new ArrayList<>();
 
         //设置占位图
         if (mLoaderData.getPlaceholderResId() != 0) {
@@ -120,33 +153,55 @@ public class GlideImageLoader implements IImageLoader {
         if (mLoaderData.getScaleType() != null) {
             switch (mLoaderData.getScaleType()) {
                 case FIT_CENTER:
-                    options.optionalFitCenter();
+                    transformations.add(new FitCenter());
                     break;
                 case CENTER_CROP:
-                    options.optionalCenterCrop();
+                    transformations.add(new CenterCrop());
                     break;
                 case CENTER_INSIDE:
-                    options.optionalCenterInside();
+                    transformations.add(new CenterInside());
                     break;
                 default:
-                    options.optionalFitCenter();
+                    transformations.add(new CenterCrop());
                     break;
             }
         }
+        //设置灰度
+        if (mLoaderData.isGray()) {
+            transformations.add(new GrayscaleTransformation(mLoaderData.getContext()));
+        }
+        //设置高斯模糊
+        if (mLoaderData.getBlurRadius() != 0) {
+            transformations.add(new BlurTransformation(mLoaderData.getContext(), mLoaderData.getBlurRadius()));
+        }
+        //设置滤镜
+        if (mLoaderData.getColorFilter() != 0) {
+            transformations.add(new ColorFilterTransformation(mLoaderData.getContext(), mLoaderData.getColorFilter()));
+        }
         //设置图片圆角
         if (mLoaderData.getRoundCornerRadius() != 0) {
-            options.override(mLoaderData.getWidth(), mLoaderData.getHeight())
-                    .optionalTransform(new RoundCornerTransform(mLoaderData.getRoundCornerRadius()));
+            transformations.add(new RoundCornerTransform(mLoaderData.getRoundCornerRadius()));
         }
         //设置圆形图片
         if (mLoaderData.getRadius() != 0) {
-            options.optionalTransform(new CircleTransform(mLoaderData.getRadius()));
+            transformations.add(new CropCircleTransformation(mLoaderData.getContext()));
         }
 
-        GlideApp.with(mLoaderData.getContext())
-                .load(mLoaderData.getUri())
-                .apply(options)
-                .into(imageView);
+        //note: if transformations is empty,then program will throw
+        //java.lang.IllegalArgumentException:
+        // MultiTransformation must contain at least one Transformation
+        if (transformations.isEmpty()) {
+            GlideApp.with(mLoaderData.getContext())
+                    .load(mLoaderData.getUri())
+                    .apply(options)
+                    .into(imageView);
+        } else {
+            GlideApp.with(mLoaderData.getContext())
+                    .load(mLoaderData.getUri())
+                    .apply(options)
+                    .transform(new MultiTransformation<>(transformations))
+                    .into(imageView);
+        }
         return this;
     }
 
