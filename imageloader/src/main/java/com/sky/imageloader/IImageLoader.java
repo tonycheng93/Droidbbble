@@ -2,7 +2,7 @@ package com.sky.imageloader;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 /**
@@ -30,6 +30,14 @@ public interface IImageLoader {
      * @return IImageLoader
      */
     IImageLoader with(Context context);
+
+    /**
+     * 需要加载的图片资源地址
+     *
+     * @param model 图片来源，支持resourceId,url,Uri,file
+     * @return IImageLoader
+     */
+    IImageLoader load(@NonNull Object model);
 
     /**
      * 设置占位图
@@ -71,22 +79,6 @@ public interface IImageLoader {
      * @return IImageLoader
      */
     IImageLoader override(int width, int height);
-
-    /**
-     * 设置需要加载图片的Uri
-     *
-     * @param resourceId 资源id
-     * @return IImageLoader
-     */
-    IImageLoader load(int resourceId);
-
-    /**
-     * 设置需要加载图片的Uri
-     *
-     * @param uri {@link Uri}
-     * @return IImageLoader
-     */
-    IImageLoader load(Uri uri);
 
     /**
      * 设置需要显示的{@link android.widget.ImageView.ScaleType}
@@ -143,4 +135,12 @@ public interface IImageLoader {
      * @return IImageLoader
      */
     IImageLoader into(ImageView imageView);
+
+    /**
+     * 当且仅获取bitmap时使用
+     *
+     * @param callback {@link FinalCallback}
+     * @return IImageLoader
+     */
+    IImageLoader into(FinalCallback callback);
 }

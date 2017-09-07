@@ -3,7 +3,7 @@ package com.sky.imageloader.glide;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.bumptech.glide.load.MultiTransformation;
@@ -11,7 +11,9 @@ import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.sky.imageloader.FinalCallback;
 import com.sky.imageloader.IImageLoader;
 import com.sky.imageloader.LoaderData;
 import com.sky.imageloader.glide.transformations.BlurTransformation;
@@ -54,6 +56,12 @@ public class GlideImageLoader implements IImageLoader {
     }
 
     @Override
+    public IImageLoader load(@NonNull Object model) {
+        mLoaderData.setObject(model);
+        return this;
+    }
+
+    @Override
     public IImageLoader setPlaceholder(int resourceId) {
         mLoaderData.setPlaceholderResId(resourceId);
         return this;
@@ -81,18 +89,6 @@ public class GlideImageLoader implements IImageLoader {
     public IImageLoader override(int width, int height) {
         mLoaderData.setWidth(width);
         mLoaderData.setHeight(height);
-        return this;
-    }
-
-    @Override
-    public IImageLoader load(int resourceId) {
-        mLoaderData.setResourceId(resourceId);
-        return this;
-    }
-
-    @Override
-    public IImageLoader load(Uri uri) {
-        mLoaderData.setUri(uri);
         return this;
     }
 
@@ -134,16 +130,24 @@ public class GlideImageLoader implements IImageLoader {
 
     @Override
     public IImageLoader into(ImageView imageView) {
+        final GlideRequests glideRequests = GlideApp.with(mLoaderData.getContext());
+        glideRequests.asBitmap();
         RequestOptions options = new RequestOptions();
         List<Transformation<Bitmap>> transformations = new ArrayList<>();
 
         //设置占位图
         if (mLoaderData.getPlaceholderResId() != 0) {
-            options.placeholder(mLoaderData.getResourceId());
+            options.placeholder(mLoaderData.getPlaceholderResId());
+        }
+        if (mLoaderData.getPlaceholderDrawable() != null) {
+            options.placeholder(mLoaderData.getPlaceholderDrawable());
         }
         //设置加载出错占位图
         if (mLoaderData.getErrorPlaceholderResId() != 0) {
             options.error(mLoaderData.getErrorPlaceholderResId());
+        }
+        if (mLoaderData.getErrorPlaceholderDrawable() != null) {
+            options.error(mLoaderData.getErrorPlaceholderDrawable());
         }
         //剪裁图片大小
         if (mLoaderData.getWidth() != 0 && mLoaderData.getHeight() != 0) {
@@ -191,17 +195,24 @@ public class GlideImageLoader implements IImageLoader {
         //java.lang.IllegalArgumentException:
         // MultiTransformation must contain at least one Transformation
         if (transformations.isEmpty()) {
-            GlideApp.with(mLoaderData.getContext())
-                    .load(mLoaderData.getUri())
+            glideRequests
+                    .load(mLoaderData.getObject())
                     .apply(options)
+                    .transition(new DrawableTransitionOptions().crossFade())
                     .into(imageView);
         } else {
-            GlideApp.with(mLoaderData.getContext())
-                    .load(mLoaderData.getUri())
+            glideRequests
+                    .load(mLoaderData.getObject())
                     .apply(options)
+                    .transition(DrawableTransitionOptions.withCrossFade(3000))
                     .transform(new MultiTransformation<>(transformations))
                     .into(imageView);
         }
+        return this;
+    }
+
+    @Override
+    public IImageLoader into(FinalCallback callback) {
         return this;
     }
 

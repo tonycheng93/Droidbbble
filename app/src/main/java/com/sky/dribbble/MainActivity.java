@@ -1,7 +1,9 @@
 package com.sky.dribbble;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -11,24 +13,29 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.BaseTarget;
+import com.bumptech.glide.request.target.ImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
 import com.sky.imageloader.ImageLoaderFactory;
 import com.sky.imageloader.glide.GlideApp;
-import com.sky.imageloader.glide.transformations.ColorFilterTransformation;
-import com.sky.imageloader.glide.transformations.CropCircleTransformation;
-import com.sky.imageloader.glide.transformations.GrayscaleTransformation;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IUserView {
@@ -65,16 +72,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Observable.just(1)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        mUserPresenter = new UserPresenter();
-                        mUserPresenter.attachView(MainActivity.this);
-                        mUserPresenter.getUser();
-                    }
-                });
+        mUserPresenter = new UserPresenter();
+        mUserPresenter.attachView(MainActivity.this);
+        mUserPresenter.getUser();
+
     }
 
     @Override
@@ -142,21 +143,41 @@ public class MainActivity extends AppCompatActivity
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
             final String url = "https://cdn.dribbble.com/users/63407/screenshots/3780917/dribbble_aloe_vera_bloom.png";
-//            ImageLoaderFactory.getImageLoader()
-//                    .with(this)
-//                    .load(Uri.parse(url))
-//                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
+            ImageLoaderFactory.getImageLoader()
+                    .with(this)
+                    .load(avatarUrl)
+                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
 //                    .override(200,200)
-////                    .blur(12)
+                    .setPlaceholder(R.mipmap.ic_launcher)
+//                    .blur(12)
 //                    .gray(true)
 //                    .roundCorner(8)
-//                    .into(mAvatarImageView);
-            GlideApp.with(this)
-                    .load(avatarUrl)
-                    .centerCrop()
-                    .transform(new MultiTransformation<>(new ColorFilterTransformation(this,R.color.colorAccent),
-                            new CropCircleTransformation(this)))
+//                    .colorFilter(R.color.colorPrimaryDark)
                     .into(mAvatarImageView);
+            GlideApp.with(this)
+                    .asBitmap()
+                    .load(url)
+                    .into(new BaseTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+
+                        }
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            super.onLoadFailed(errorDrawable);
+                        }
+
+                        @Override
+                        public void getSize(SizeReadyCallback cb) {
+
+                        }
+
+                        @Override
+                        public void removeCallback(SizeReadyCallback cb) {
+
+                        }
+                    });
         }
     }
 

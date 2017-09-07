@@ -2,7 +2,6 @@ package com.sky.imageloader;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.widget.ImageView;
 
 /**
@@ -13,17 +12,15 @@ public class LoaderData {
 
     private Context mContext = null;
 
-    private int mPlaceholderResId = 0;
+    private Object mObject = null;
+
+    private int mPlaceholderResId = 0;//加载占位图资源id
 
     private Drawable mPlaceholderDrawable = null;
 
     private int mErrorPlaceholderResId = 0;
 
     private Drawable mErrorPlaceholderDrawable = null;
-
-    private int mResourceId = 0;
-
-    private Uri mUri = null;
 
     private int width = 0;
 
@@ -41,12 +38,22 @@ public class LoaderData {
 
     private int colorFilter = 0;
 
+    private FinalCallback callback = null;
+
     public Context getContext() {
         return mContext;
     }
 
     public void setContext(Context context) {
         mContext = context;
+    }
+
+    public Object getObject() {
+        return mObject;
+    }
+
+    public void setObject(Object object) {
+        mObject = object;
     }
 
     public int getPlaceholderResId() {
@@ -79,22 +86,6 @@ public class LoaderData {
 
     public void setErrorPlaceholderDrawable(Drawable errorPlaceholderDrawable) {
         mErrorPlaceholderDrawable = errorPlaceholderDrawable;
-    }
-
-    public int getResourceId() {
-        return mResourceId;
-    }
-
-    public void setResourceId(int resourceId) {
-        mResourceId = resourceId;
-    }
-
-    public Uri getUri() {
-        return mUri;
-    }
-
-    public void setUri(Uri uri) {
-        mUri = uri;
     }
 
     public int getWidth() {
@@ -159,5 +150,13 @@ public class LoaderData {
 
     public void setColorFilter(int colorFilter) {
         this.colorFilter = colorFilter;
+    }
+
+    public FinalCallback getCallback() {
+        return callback;
+    }
+
+    public void setCallback(FinalCallback callback) {
+        this.callback = callback;
     }
 }
