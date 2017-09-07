@@ -1,9 +1,7 @@
 package com.sky.dribbble;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,23 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.Request;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.BaseTarget;
-import com.bumptech.glide.request.target.ImageViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
+import com.sky.imageloader.FinalCallback;
 import com.sky.imageloader.ImageLoaderFactory;
-import com.sky.imageloader.glide.GlideApp;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IUserView {
@@ -63,7 +49,8 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string
+                .navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -142,42 +129,38 @@ public class MainActivity extends AppCompatActivity
         }
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-            final String url = "https://cdn.dribbble.com/users/63407/screenshots/3780917/dribbble_aloe_vera_bloom.png";
+            final String url = "https://cdn.dribbble" +
+                    ".com/users/63407/screenshots/3780917/dribbble_aloe_vera_bloom.png";
             ImageLoaderFactory.getImageLoader()
                     .with(this)
-                    .load(avatarUrl)
-                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
-//                    .override(200,200)
-                    .setPlaceholder(R.mipmap.ic_launcher)
-//                    .blur(12)
-//                    .gray(true)
-//                    .roundCorner(8)
-//                    .colorFilter(R.color.colorPrimaryDark)
-                    .into(mAvatarImageView);
-            GlideApp.with(this)
                     .asBitmap()
                     .load(url)
-                    .into(new BaseTarget<Bitmap>() {
+                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
+//                    .override(200,200)
+//                    .setPlaceholder(R.mipmap.ic_launcher)
+                    .blur(10)
+//                    .gray(true)
+                    .circle(100)
+//                    .roundCorner(100)
+//                    .roundCorner(8)
+                    .colorFilter(R.color.colorPrimaryDark)
+                    .into(new FinalCallback() {
                         @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-
+                        public void onSuccess(Object bitmap) {
+                            Log.d(TAG, "onSuccess: bitmap = " + bitmap);
+                            mAvatarImageView.setImageBitmap((Bitmap) bitmap);
                         }
 
                         @Override
-                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                            super.onLoadFailed(errorDrawable);
-                        }
-
-                        @Override
-                        public void getSize(SizeReadyCallback cb) {
-
-                        }
-
-                        @Override
-                        public void removeCallback(SizeReadyCallback cb) {
-
+                        public void onFailed(Throwable throwable) {
+                            Log.d(TAG, "onFailed: " + throwable.getMessage());
                         }
                     });
+//                    .into(mAvatarImageView);
+//            GlideApp.with(this)
+//                    .asBitmap()
+//                    .load(url)
+//                    .into(mAvatarImageView);
         }
     }
 

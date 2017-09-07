@@ -32,6 +32,12 @@ public interface IImageLoader {
     IImageLoader with(Context context);
 
     /**
+     * 指定转换为bitmap
+     * @return IImageLoader
+     */
+    IImageLoader asBitmap();
+
+    /**
      * 需要加载的图片资源地址
      *
      * @param model 图片来源，支持resourceId,url,Uri,file

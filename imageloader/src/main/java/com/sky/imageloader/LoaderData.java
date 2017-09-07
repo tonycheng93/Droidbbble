@@ -40,6 +40,8 @@ public class LoaderData {
 
     private FinalCallback callback = null;
 
+    private boolean asBitmap = false;
+
     public Context getContext() {
         return mContext;
     }
@@ -158,5 +160,13 @@ public class LoaderData {
 
     public void setCallback(FinalCallback callback) {
         this.callback = callback;
+    }
+
+    public boolean isAsBitmap() {
+        return asBitmap;
+    }
+
+    public void setAsBitmap(boolean asBitmap) {
+        this.asBitmap = asBitmap;
     }
 }

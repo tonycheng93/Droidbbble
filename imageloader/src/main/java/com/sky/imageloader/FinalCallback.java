@@ -1,7 +1,5 @@
 package com.sky.imageloader;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by tonycheng on 2017/9/7.
  */
@@ -14,9 +12,9 @@ public interface FinalCallback {
     /**
      * 成功获取bitmap
      *
-     * @param bitmap {@link Bitmap}
+     * @param object
      */
-    void onSuccess(Bitmap bitmap);
+    void onSuccess(Object object);
 
     /**
      * 获取bitmap失败

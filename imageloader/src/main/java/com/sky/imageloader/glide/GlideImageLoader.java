@@ -11,8 +11,9 @@ import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.sky.imageloader.FinalCallback;
 import com.sky.imageloader.IImageLoader;
 import com.sky.imageloader.LoaderData;
@@ -30,6 +31,8 @@ import java.util.List;
  */
 
 public class GlideImageLoader implements IImageLoader {
+
+    private static final String TAG = "GlideImageLoader";
 
     private LoaderData mLoaderData = null;
     private static final Object LOCK = new Object();
@@ -52,6 +55,12 @@ public class GlideImageLoader implements IImageLoader {
         }
         mLoaderData = new LoaderData();
         mLoaderData.setContext(context);
+        return this;
+    }
+
+    @Override
+    public IImageLoader asBitmap() {
+        mLoaderData.setAsBitmap(true);
         return this;
     }
 
@@ -131,7 +140,7 @@ public class GlideImageLoader implements IImageLoader {
     @Override
     public IImageLoader into(ImageView imageView) {
         final GlideRequests glideRequests = GlideApp.with(mLoaderData.getContext());
-        glideRequests.asBitmap();
+        GlideRequest glideRequest = glideRequests.load(mLoaderData.getObject());
         RequestOptions options = new RequestOptions();
         List<Transformation<Bitmap>> transformations = new ArrayList<>();
 
@@ -176,11 +185,13 @@ public class GlideImageLoader implements IImageLoader {
         }
         //设置高斯模糊
         if (mLoaderData.getBlurRadius() != 0) {
-            transformations.add(new BlurTransformation(mLoaderData.getContext(), mLoaderData.getBlurRadius()));
+            transformations.add(new BlurTransformation(mLoaderData.getContext(), mLoaderData
+                    .getBlurRadius()));
         }
         //设置滤镜
         if (mLoaderData.getColorFilter() != 0) {
-            transformations.add(new ColorFilterTransformation(mLoaderData.getContext(), mLoaderData.getColorFilter()));
+            transformations.add(new ColorFilterTransformation(mLoaderData.getContext(),
+                    mLoaderData.getColorFilter()));
         }
         //设置图片圆角
         if (mLoaderData.getRoundCornerRadius() != 0) {
@@ -194,25 +205,119 @@ public class GlideImageLoader implements IImageLoader {
         //note: if transformations is empty,then program will throw
         //java.lang.IllegalArgumentException:
         // MultiTransformation must contain at least one Transformation
-        if (transformations.isEmpty()) {
-            glideRequests
-                    .load(mLoaderData.getObject())
-                    .apply(options)
-                    .transition(new DrawableTransitionOptions().crossFade())
-                    .into(imageView);
-        } else {
-            glideRequests
-                    .load(mLoaderData.getObject())
-                    .apply(options)
-                    .transition(DrawableTransitionOptions.withCrossFade(3000))
-                    .transform(new MultiTransformation<>(transformations))
-                    .into(imageView);
+        glideRequest.apply(options);
+        if (!transformations.isEmpty()) {
+            glideRequest.transform(new MultiTransformation<>(transformations));
         }
+        glideRequest.into(imageView);
+//        if (transformations.isEmpty()) {
+//            glideRequests
+//                    .load(mLoaderData.getObject())
+//                    .apply(options)
+//                    .transition(new DrawableTransitionOptions().crossFade())
+//                    .into(imageView);
+//        } else {
+//            glideRequests
+//                    .load(mLoaderData.getObject())
+//                    .apply(options)
+//                    .transition(DrawableTransitionOptions.withCrossFade(3000))
+//                    .transform(new MultiTransformation<>(transformations))
+//                    .into(imageView);
+//        }
         return this;
     }
 
     @Override
-    public IImageLoader into(FinalCallback callback) {
+    public IImageLoader into(@NonNull final FinalCallback callback) {
+        GlideRequests glideRequests = GlideApp.with(mLoaderData.getContext());
+        GlideRequest glideRequest;
+        if (mLoaderData.isAsBitmap()) {
+            glideRequest = glideRequests.asBitmap().load(mLoaderData.getObject());
+        } else {
+            glideRequest = glideRequests.load(mLoaderData.getObject());
+        }
+
+        RequestOptions options = new RequestOptions();
+        List<Transformation<Bitmap>> transformations = new ArrayList<>();
+
+        //设置占位图
+        if (mLoaderData.getPlaceholderResId() != 0) {
+            options.placeholder(mLoaderData.getPlaceholderResId());
+        }
+        if (mLoaderData.getPlaceholderDrawable() != null) {
+            options.placeholder(mLoaderData.getPlaceholderDrawable());
+        }
+        //设置加载出错占位图
+        if (mLoaderData.getErrorPlaceholderResId() != 0) {
+            options.error(mLoaderData.getErrorPlaceholderResId());
+        }
+        if (mLoaderData.getErrorPlaceholderDrawable() != null) {
+            options.error(mLoaderData.getErrorPlaceholderDrawable());
+        }
+        //剪裁图片大小
+        if (mLoaderData.getWidth() != 0 && mLoaderData.getHeight() != 0) {
+            options.override(mLoaderData.getWidth(), mLoaderData.getHeight());
+        }
+        //设置图片ScaleType
+        if (mLoaderData.getScaleType() != null) {
+            switch (mLoaderData.getScaleType()) {
+                case FIT_CENTER:
+                    transformations.add(new FitCenter());
+                    break;
+                case CENTER_CROP:
+                    transformations.add(new CenterCrop());
+                    break;
+                case CENTER_INSIDE:
+                    transformations.add(new CenterInside());
+                    break;
+                default:
+                    transformations.add(new CenterCrop());
+                    break;
+            }
+        }
+        //设置灰度
+        if (mLoaderData.isGray()) {
+            transformations.add(new GrayscaleTransformation(mLoaderData.getContext()));
+        }
+        //设置高斯模糊
+        if (mLoaderData.getBlurRadius() != 0) {
+            transformations.add(new BlurTransformation(mLoaderData.getContext(), mLoaderData
+                    .getBlurRadius()));
+        }
+        //设置滤镜
+        if (mLoaderData.getColorFilter() != 0) {
+            transformations.add(new ColorFilterTransformation(mLoaderData.getContext(),
+                    mLoaderData.getColorFilter()));
+        }
+        //设置图片圆角
+        if (mLoaderData.getRoundCornerRadius() != 0) {
+            transformations.add(new RoundCornerTransform(mLoaderData.getRoundCornerRadius()));
+        }
+        //设置圆形图片
+        if (mLoaderData.getRadius() != 0) {
+            transformations.add(new CropCircleTransformation(mLoaderData.getContext()));
+        }
+
+        //note: if transformations is empty,then program will throw
+        //java.lang.IllegalArgumentException:
+        // MultiTransformation must contain at least one Transformation
+        glideRequest.apply(options);
+        if (!transformations.isEmpty()) {
+            glideRequest.transform(new MultiTransformation<>(transformations));
+        }
+
+        glideRequest.into(new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                if (resource != null) {
+                    callback.onSuccess(resource);
+                } else {
+                    callback.onFailed(new Throwable("bitmap == null or callback " +
+                            "== null"));
+                }
+            }
+        });
         return this;
     }
 
