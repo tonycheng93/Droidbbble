@@ -2,7 +2,10 @@ package com.sky.dribbble.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
 
     @SerializedName("avatar_url")
     private String avatarUrl;
@@ -70,4 +73,41 @@ public class User {
                         ",username = '" + username + '\'' +
                         "}";
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.avatarUrl);
+        dest.writeString(this.htmlUrl);
+        dest.writeString(this.name);
+        dest.writeInt(this.id);
+        dest.writeString(this.username);
+    }
+
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        this.avatarUrl = in.readString();
+        this.htmlUrl = in.readString();
+        this.name = in.readString();
+        this.id = in.readInt();
+        this.username = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

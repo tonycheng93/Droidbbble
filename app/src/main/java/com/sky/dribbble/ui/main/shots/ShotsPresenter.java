@@ -1,26 +1,27 @@
-package com.sky.dribbble.ui.user;
+package com.sky.dribbble.ui.main.shots;
 
 import com.sky.appcore.mvp.presenter.BasePresenter;
 import com.sky.dribbble.data.DataManager;
-import com.sky.dribbble.data.model.User;
+import com.sky.dribbble.data.model.Shots;
+
+import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
 
 /**
- * Created by tonycheng on 2017/9/4.
+ * Created by tonycheng on 2017/9/8.
  */
 
-public class UserPresenter extends BasePresenter<IUserView> {
+public class ShotsPresenter extends BasePresenter<IShotsView> {
 
-    private static final String TAG = "UserPresenter";
+    private static final String TAG = "ShotsPresenter";
 
     private Disposable mDisposable = null;
 
     @Override
-    public void attachView(IUserView mvpView) {
+    public void attachView(IShotsView mvpView) {
         super.attachView(mvpView);
     }
 
@@ -32,31 +33,34 @@ public class UserPresenter extends BasePresenter<IUserView> {
         }
     }
 
-    public void getUser() {
+    public void getShots(int perPage, int page) {
         checkViewAttached();
-        DataManager.getInstance()
-                .getUser()
-                .subscribe(new Observer<User>() {
+        getMvpView().showLoading();
+        DataManager.getInstance().getShots(perPage, page)
+                .subscribe(new Observer<List<Shots>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         mDisposable = d;
                     }
 
                     @Override
-                    public void onNext(@NonNull User user) {
-                        Timber.d("onNext() current thread  = " + Thread.currentThread().getName());
-                        getMvpView().showUser(user);
+                    public void onNext(@NonNull List<Shots> shotsList) {
+                        getMvpView().hideLoading();
+                        if (shotsList.isEmpty()) {
+                            getMvpView().showEmpty();
+                        } else {
+                            getMvpView().showShots(shotsList);
+                        }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Timber.d("onError current thread  = " + Thread.currentThread());
-                        Timber.e("onError = " + e.toString());
+
                     }
 
                     @Override
                     public void onComplete() {
-                        Timber.d("onComplete");
+
                     }
                 });
     }

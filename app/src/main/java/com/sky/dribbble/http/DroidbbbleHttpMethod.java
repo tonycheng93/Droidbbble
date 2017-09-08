@@ -3,8 +3,11 @@ package com.sky.dribbble.http;
 import android.support.v4.util.ArrayMap;
 
 import com.sky.appcore.http.HttpMethod;
+import com.sky.dribbble.data.model.Shots;
 import com.sky.dribbble.data.model.User;
+import com.sky.dribbble.data.remote.DroidbbbleService;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -15,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by tonycheng on 2017/9/1.
  */
 
-public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleHttpService> {
+public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleService> {
 
     private DroidbbbleHttpMethod() {
     }
@@ -29,8 +32,8 @@ public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleHttpService> {
     }
 
     @Override
-    protected Class<DroidbbbleHttpService> getServiceClazz() {
-        return DroidbbbleHttpService.class;
+    protected Class<DroidbbbleService> getServiceClazz() {
+        return DroidbbbleService.class;
     }
 
     @Override
@@ -47,6 +50,12 @@ public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleHttpService> {
 
     public Observable<User> getUser() {
         return getService().getUser()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<List<Shots>> getShots(int perPage, int page) {
+        return getService().getShots(perPage, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

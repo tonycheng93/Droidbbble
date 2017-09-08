@@ -1,7 +1,10 @@
 package com.sky.dribbble.data;
 
+import com.sky.dribbble.data.model.Shots;
 import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.http.DroidbbbleHttpMethod;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -28,5 +31,10 @@ public class DataManager {
     public Observable<User> getUser() {
         return DroidbbbleHttpMethod.getInstance()
                 .getUser();
+    }
+
+    public Observable<List<Shots>> getShots(int perPage, int page) {
+        return DroidbbbleHttpMethod.getInstance()
+                .getShots(perPage, page);
     }
 }

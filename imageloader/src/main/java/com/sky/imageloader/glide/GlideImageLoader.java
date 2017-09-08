@@ -18,6 +18,7 @@ import com.sky.imageloader.FinalCallback;
 import com.sky.imageloader.IImageLoader;
 import com.sky.imageloader.LoaderData;
 import com.sky.imageloader.glide.transformations.BlurTransformation;
+import com.sky.imageloader.glide.transformations.CircleTransformation;
 import com.sky.imageloader.glide.transformations.ColorFilterTransformation;
 import com.sky.imageloader.glide.transformations.CropCircleTransformation;
 import com.sky.imageloader.glide.transformations.GrayscaleTransformation;
@@ -139,8 +140,7 @@ public class GlideImageLoader implements IImageLoader {
 
     @Override
     public IImageLoader into(ImageView imageView) {
-        final GlideRequests glideRequests = GlideApp.with(mLoaderData.getContext());
-        GlideRequest glideRequest = glideRequests.load(mLoaderData.getObject());
+        final GlideRequest<Drawable> glideRequest = GlideApp.with(mLoaderData.getContext()).load(mLoaderData.getObject());
         RequestOptions options = new RequestOptions();
         List<Transformation<Bitmap>> transformations = new ArrayList<>();
 
@@ -199,31 +199,18 @@ public class GlideImageLoader implements IImageLoader {
         }
         //设置圆形图片
         if (mLoaderData.getRadius() != 0) {
-            transformations.add(new CropCircleTransformation(mLoaderData.getContext()));
+            transformations.add(new CircleTransformation(mLoaderData.getRadius()));
         }
 
         //note: if transformations is empty,then program will throw
         //java.lang.IllegalArgumentException:
         // MultiTransformation must contain at least one Transformation
-        glideRequest.apply(options);
+
         if (!transformations.isEmpty()) {
-            glideRequest.transform(new MultiTransformation<>(transformations));
+            options.transform(new MultiTransformation<>(transformations));
         }
+        glideRequest.apply(options);
         glideRequest.into(imageView);
-//        if (transformations.isEmpty()) {
-//            glideRequests
-//                    .load(mLoaderData.getObject())
-//                    .apply(options)
-//                    .transition(new DrawableTransitionOptions().crossFade())
-//                    .into(imageView);
-//        } else {
-//            glideRequests
-//                    .load(mLoaderData.getObject())
-//                    .apply(options)
-//                    .transition(DrawableTransitionOptions.withCrossFade(3000))
-//                    .transform(new MultiTransformation<>(transformations))
-//                    .into(imageView);
-//        }
         return this;
     }
 
@@ -301,11 +288,10 @@ public class GlideImageLoader implements IImageLoader {
         //note: if transformations is empty,then program will throw
         //java.lang.IllegalArgumentException:
         // MultiTransformation must contain at least one Transformation
-        glideRequest.apply(options);
         if (!transformations.isEmpty()) {
-            glideRequest.transform(new MultiTransformation<>(transformations));
+            options.transform(new MultiTransformation<>(transformations));
         }
-
+        glideRequest.apply(options);
         glideRequest.into(new SimpleTarget<Bitmap>() {
 
             @Override

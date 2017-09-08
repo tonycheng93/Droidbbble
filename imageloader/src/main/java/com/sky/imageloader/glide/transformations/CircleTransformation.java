@@ -16,7 +16,7 @@ import java.security.MessageDigest;
 /**
  * 实现圆形图片
  */
-public class CircleTransform extends BitmapTransformation {
+public class CircleTransformation extends BitmapTransformation {
 
     private static final int VERSION = 1;
     private static final String ID = "com.sky.imageloader.glide.transformations.circletransform." + VERSION;
@@ -24,7 +24,7 @@ public class CircleTransform extends BitmapTransformation {
 
     private final int radius;
 
-    public CircleTransform(int radius) {
+    public CircleTransformation(int radius) {
         this.radius = radius;
     }
 
@@ -35,7 +35,7 @@ public class CircleTransform extends BitmapTransformation {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof CircleTransform;
+        return o instanceof CircleTransformation;
     }
 
     @Override

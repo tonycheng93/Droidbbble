@@ -33,9 +33,31 @@ public interface IImageLoader {
 
     /**
      * 指定转换为bitmap
+     *
      * @return IImageLoader
      */
     IImageLoader asBitmap();
+//
+//    /**
+//     * 指定转换为 drawable
+//     *
+//     * @return IImageLoader
+//     */
+//    IImageLoader asDrawable();
+//
+//    /**
+//     * 指定转换为 gif
+//     *
+//     * @return IImageLoader
+//     */
+//    IImageLoader asGif();
+//
+//    /**
+//     * 指定转换为 file
+//     *
+//     * @return IImageLoader
+//     */
+//    IImageLoader asFile();
 
     /**
      * 需要加载的图片资源地址
