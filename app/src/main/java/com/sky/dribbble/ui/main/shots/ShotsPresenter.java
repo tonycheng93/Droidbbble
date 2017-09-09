@@ -55,7 +55,8 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        getMvpView().hideLoading();
+                        getMvpView().showError();
                     }
 
                     @Override

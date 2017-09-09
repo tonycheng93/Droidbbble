@@ -1,6 +1,5 @@
 package com.sky.dribbble;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,25 +10,27 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
+import com.sky.dribbble.data.model.Shots;
 import com.sky.dribbble.data.model.User;
+import com.sky.dribbble.ui.main.shots.IShotsView;
+import com.sky.dribbble.ui.main.shots.ShotsPresenter;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
-import com.sky.imageloader.FinalCallback;
 import com.sky.imageloader.ImageLoaderFactory;
-import com.sky.imageloader.glide.GlideApp;
 
-import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IUserView {
+        implements NavigationView.OnNavigationItemSelectedListener, IUserView,
+        IShotsView {
 
     private static final String TAG = "MainActivity";
 
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity
         mUserPresenter.attachView(MainActivity.this);
         mUserPresenter.getUser();
 
+        ShotsPresenter shotsPresenter = new ShotsPresenter();
+        shotsPresenter.attachView(this);
+        shotsPresenter.getShots(10, 1);
     }
 
     @Override
@@ -161,15 +165,15 @@ public class MainActivity extends AppCompatActivity
 //                        }
 //                    });
 //                    .into(mAvatarImageView);
-            GlideApp.with(this)
-                    .asFile()
-                    .load(url)
-                    .into(new SimpleTarget<File>() {
-                        @Override
-                        public void onResourceReady(File resource, Transition<? super File> transition) {
-                            Log.d(TAG, "onResourceReady: resource = " + resource.getAbsolutePath());
-                        }
-                    });
+//            GlideApp.with(this)
+//                    .asFile()
+//                    .load(url)
+//                    .into(new SimpleTarget<File>() {
+//                        @Override
+//                        public void onResourceReady(File resource, Transition<? super File> transition) {
+//                            Log.d(TAG, "onResourceReady: resource = " + resource.getAbsolutePath());
+//                        }
+//                    });
         }
     }
 
@@ -177,5 +181,30 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         ImageLoaderFactory.destroy();
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void showShots(List<Shots> shotsList) {
+        Timber.d("shotsList = " + shotsList);
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError() {
+
     }
 }
