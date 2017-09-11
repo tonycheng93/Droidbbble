@@ -1,5 +1,6 @@
-package com.sky.dribbble.ui.main.shots;
+package com.sky.dribbble.ui.shots;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import com.sky.dribbble.R;
 import com.sky.dribbble.data.model.Image;
 import com.sky.dribbble.data.model.Shots;
 import com.sky.dribbble.data.model.User;
-import com.sky.dribbble.ui.main.shots.ShotsFragment.OnListFragmentInteractionListener;
+import com.sky.dribbble.ui.shots.ShotsFragment.OnListFragmentInteractionListener;
 import com.sky.imageloader.ImageLoaderFactory;
 
 import java.util.List;
@@ -23,14 +24,15 @@ import butterknife.ButterKnife;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Shots} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> {
 
+    private Context mContext;
     private final List<Shots> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public ShotsAdapter(List<Shots> items, OnListFragmentInteractionListener listener) {
+    public ShotsAdapter(Context context,List<Shots> items, OnListFragmentInteractionListener listener) {
+        mContext = context;
         mValues = items;
         mListener = listener;
     }
@@ -54,6 +56,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
             final String normal = images.getNormal();
             if (!TextUtils.isEmpty(normal)) {
                 ImageLoaderFactory.getImageLoader()
+                        .with(mContext)
                         .load(normal)
                         .into(holder.mPhotoView);
             }
@@ -63,6 +66,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
             final String avatarUrl = user.getAvatarUrl();
             if (!TextUtils.isEmpty(avatarUrl)) {
                 ImageLoaderFactory.getImageLoader()
+                        .with(mContext)
                         .load(avatarUrl)
                         .circle(80)
                         .into(holder.mAvatarView);
@@ -119,7 +123,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            ButterKnife.bind(mView);
+            ButterKnife.bind(this,mView);
         }
 
         @Override

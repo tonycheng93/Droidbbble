@@ -1,4 +1,4 @@
-package com.sky.dribbble.ui.main.shots;
+package com.sky.dribbble.ui.shots;
 
 import com.sky.appcore.mvp.presenter.BasePresenter;
 import com.sky.dribbble.data.DataManager;
@@ -14,14 +14,12 @@ import io.reactivex.disposables.Disposable;
  * Created by tonycheng on 2017/9/8.
  */
 
-public class ShotsPresenter extends BasePresenter<IShotsView> {
-
-    private static final String TAG = "ShotsPresenter";
+public class ShotsPresenter extends BasePresenter<com.sky.dribbble.ui.main.shots.IShotsView> {
 
     private Disposable mDisposable = null;
 
     @Override
-    public void attachView(IShotsView mvpView) {
+    public void attachView(com.sky.dribbble.ui.main.shots.IShotsView mvpView) {
         super.attachView(mvpView);
     }
 

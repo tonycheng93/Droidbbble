@@ -1,4 +1,4 @@
-package com.sky.dribbble.ui.main.shots;
+package com.sky.dribbble.ui.shots;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,16 +12,19 @@ import android.view.ViewGroup;
 
 import com.sky.dribbble.R;
 import com.sky.dribbble.data.model.Shots;
+import com.sky.dribbble.ui.main.shots.IShotsView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A fragment representing a list of Items.
- * <p />
+ * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IShotsView {
+public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        IShotsView {
 
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -29,7 +32,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private static final int PER_PAGE = 10;
     private int page = 1;
     private ShotsAdapter mShotsAdapter;
-    private List<Shots> mShotsList;
+    private List<Shots> mShotsList = new ArrayList<>();
 
     private OnListFragmentInteractionListener mListener;
 
@@ -47,9 +50,6 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mShotsPresenter = new ShotsPresenter();
-        mShotsPresenter.attachView(this);
-        mShotsPresenter.getShots(PER_PAGE, page);
     }
 
     @Override
@@ -65,7 +65,13 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerView.addOnScrollListener(mScrollListener);
 
-        mShotsAdapter = new ShotsAdapter(mShotsList, mListener);
+        mShotsPresenter = new ShotsPresenter();
+        mShotsPresenter.attachView(this);
+        mShotsPresenter.getShots(PER_PAGE, page);
+
+//        mShotsAdapter = new ShotsAdapter(mShotsList, mListener);
+//        mRecyclerView.setAdapter(mShotsAdapter);
+
 
         return view;
     }
@@ -82,7 +88,9 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void showShots(List<Shots> shotsList) {
-
+        mShotsList = shotsList;
+        mShotsAdapter = new ShotsAdapter(getActivity(),mShotsList,mListener);
+        mRecyclerView.setAdapter(mShotsAdapter);
     }
 
     @Override
