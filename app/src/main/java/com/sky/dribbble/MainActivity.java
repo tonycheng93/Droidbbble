@@ -15,26 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.sky.dribbble.data.model.Shots;
 import com.sky.dribbble.data.model.User;
-import com.sky.dribbble.ui.main.shots.IShotsView;
-import com.sky.dribbble.ui.main.shots.ShotsPresenter;
 import com.sky.dribbble.ui.user.IUserView;
 import com.sky.dribbble.ui.user.UserPresenter;
 import com.sky.imageloader.ImageLoaderFactory;
 
-import java.util.Arrays;
-import java.util.List;
-
-import timber.log.Timber;
-
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IUserView,
-        IShotsView {
+        implements NavigationView.OnNavigationItemSelectedListener, IUserView {
 
     private static final String TAG = "MainActivity";
 
-    private ImageView mAvatarImageView;
     private UserPresenter mUserPresenter;
 
     @Override
@@ -60,18 +50,12 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-//        mAvatarImageView = (ImageView) findViewById(R.id.test_image);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mUserPresenter = new UserPresenter();
-        mUserPresenter.attachView(MainActivity.this);
+        mUserPresenter.attachView(this);
         mUserPresenter.getUser();
-
-        ShotsPresenter shotsPresenter = new ShotsPresenter();
-        shotsPresenter.attachView(this);
-        shotsPresenter.getShots(10, 1);
     }
 
     @Override
@@ -136,75 +120,20 @@ public class MainActivity extends AppCompatActivity
         if (user == null) {
             return;
         }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ImageView avatarView = (ImageView) drawer.findViewById(R.id.iv_nav_avatar);
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-            final String url = "https://cdn.dribbble" +
-                    ".com/users/63407/screenshots/3780917/dribbble_aloe_vera_bloom.png";
-//            ImageLoaderFactory.getImageLoader()
-//                    .with(this)
-//                    .asBitmap()
-//                    .load(url)
-//                    .setScaleType(ImageView.ScaleType.FIT_CENTER)
-//                    .override(100,100)
-//                    .setPlaceholder(R.mipmap.ic_launcher)
-//                    .blur(10)
-//                    .gray(true)
-//                    .circle(10)
-//                    .roundCorner(8)
-//                    .colorFilter(R.color.colorPrimaryDark)
-//                    .into(new FinalCallback() {
-//                        @Override
-//                        public void onSuccess(Object bitmap) {
-//                            Log.d(TAG, "onSuccess: bitmap = " + bitmap);
-//                            mAvatarImageView.setImageBitmap((Bitmap) bitmap);
-//                        }
-//
-//                        @Override
-//                        public void onFailed(Throwable throwable) {
-//                            Log.d(TAG, "onFailed: " + throwable.getMessage());
-//                        }
-//                    });
-//                    .into(mAvatarImageView);
-//            GlideApp.with(this)
-//                    .asFile()
-//                    .load(url)
-//                    .into(new SimpleTarget<File>() {
-//                        @Override
-//                        public void onResourceReady(File resource, Transition<? super File> transition) {
-//                            Log.d(TAG, "onResourceReady: resource = " + resource.getAbsolutePath());
-//                        }
-//                    });
+            ImageLoaderFactory.getImageLoader()
+                    .with(this)
+                    .load(avatarUrl)
+                    .circle(60)
+                    .into(avatarView);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ImageLoaderFactory.destroy();
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void showShots(List<Shots> shotsList) {
-        Timber.d("shotsList = " + shotsList);
-    }
-
-    @Override
-    public void showEmpty() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showError() {
-
     }
 }

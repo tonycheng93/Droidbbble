@@ -1,28 +1,36 @@
 package com.sky.dribbble.ui.main.shots;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sky.dribbble.R;
+import com.sky.dribbble.data.model.Image;
+import com.sky.dribbble.data.model.Shots;
+import com.sky.dribbble.data.model.User;
 import com.sky.dribbble.ui.main.shots.ShotsFragment.OnListFragmentInteractionListener;
-import com.sky.dribbble.ui.main.shots.dummy.DummyContent.DummyItem;
+import com.sky.imageloader.ImageLoaderFactory;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Shots} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Shots> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public ShotsAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public ShotsAdapter(List<Shots> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +45,40 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        final Shots shots = mValues.get(position);
+        if (shots == null) {
+            return;
+        }
+        final Image images = shots.getImages();
+        if (images != null) {
+            final String normal = images.getNormal();
+            if (!TextUtils.isEmpty(normal)) {
+                ImageLoaderFactory.getImageLoader()
+                        .load(normal)
+                        .into(holder.mPhotoView);
+            }
+        }
+        final User user = shots.getUser();
+        if (user != null) {
+            final String avatarUrl = user.getAvatarUrl();
+            if (!TextUtils.isEmpty(avatarUrl)) {
+                ImageLoaderFactory.getImageLoader()
+                        .load(avatarUrl)
+                        .circle(80)
+                        .into(holder.mAvatarView);
+            }
+            final String name = user.getName();
+            if (!TextUtils.isEmpty(name)) {
+                holder.mAuthorView.setText(name);
+            }
+        }
+        final String title = shots.getTitle();
+        if (!TextUtils.isEmpty(title)) {
+            holder.mTitleView.setText(title);
+        }
+        holder.mWatchCountView.setText(String.valueOf(shots.getViews_count()));
+        holder.mCommentCountView.setText(String.valueOf(shots.getComments_count()));
+        holder.mFavoriteCountView.setText(String.valueOf(shots.getLikes_count()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,20 +99,42 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        @BindView(R.id.iv_item_shots)
+        ImageView mPhotoView;
+        @BindView(R.id.iv_item_avatar)
+        ImageView mAvatarView;
+        @BindView(R.id.tv_item_title)
+        TextView mTitleView;
+        @BindView(R.id.tv_item_author)
+        TextView mAuthorView;
+        @BindView(R.id.tv_item_watch)
+        TextView mWatchCountView;
+        @BindView(R.id.tv_item_comment)
+        TextView mCommentCountView;
+        @BindView(R.id.tv_item_favorite)
+        TextView mFavoriteCountView;
+
+        public Shots mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            ButterKnife.bind(mView);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return "ViewHolder{" +
+                    "mView=" + mView +
+                    ", mPhotoView=" + mPhotoView +
+                    ", mAvatarView=" + mAvatarView +
+                    ", mTitleView=" + mTitleView +
+                    ", mAuthorView=" + mAuthorView +
+                    ", mWatchCountView=" + mWatchCountView +
+                    ", mCommentCountView=" + mCommentCountView +
+                    ", mFavoriteCountView=" + mFavoriteCountView +
+                    ", mItem=" + mItem +
+                    '}';
         }
     }
 }

@@ -45,15 +45,15 @@ public class GlideImageLoader implements IImageLoader {
 
     @Override
     public IImageLoader with(Context context) {
-        synchronized (LOCK) {
-            while (mLoaderData != null) {
-                try {
-                    LOCK.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        synchronized (LOCK) {
+//            while (mLoaderData != null) {
+//                try {
+//                    LOCK.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
         mLoaderData = new LoaderData();
         mLoaderData.setContext(context);
         return this;
@@ -309,7 +309,7 @@ public class GlideImageLoader implements IImageLoader {
 
     @Override
     public void destroy() {
-        notifyThread();
+//        notifyThread();
 
     }
 

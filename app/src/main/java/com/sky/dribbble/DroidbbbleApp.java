@@ -2,9 +2,6 @@ package com.sky.dribbble;
 
 import android.app.Application;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -20,9 +17,21 @@ import timber.log.Timber;
 
 public class DroidbbbleApp extends Application {
 
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+//        MultiDex.install(base);
+//    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(this);
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
