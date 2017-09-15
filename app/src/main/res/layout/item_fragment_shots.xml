@@ -1,132 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="@dimen/cardview_default_elevation"
-    app:elevation="@dimen/cardview_default_elevation">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="8dp"
+        app:elevation="6dp">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_item_shots"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:background="@color/cardview_dark_background"
-            android:scaleType="centerCrop"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+                android:id="@+id/iv_item_shots"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:background="@color/cardview_dark_background"
+                android:scaleType="centerCrop"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
-            android:id="@+id/iv_item_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@mipmap/ic_launcher_round"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.024"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_item_shots"
-            app:layout_constraintVertical_bias="0.0"/>
+                android:id="@+id/iv_item_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@mipmap/ic_launcher_round"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.024"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_item_shots"
+                app:layout_constraintVertical_bias="0.0"/>
 
         <TextView
-            android:id="@+id/tv_item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/iv_item_avatar"
-            app:layout_constraintTop_toTopOf="@+id/iv_item_avatar"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="@string/navigation_drawer_close"/>
+                android:id="@+id/tv_item_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textSize="18sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:textIsSelectable="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/iv_item_avatar"
+                app:layout_constraintTop_toTopOf="@+id/iv_item_avatar"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="本篇主要用作链接使用。线程池的核心就是，当接收到一个任务，需要一个线程去执行时，并不着急创建一"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"/>
 
         <TextView
-            android:id="@+id/tv_item_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_item_avatar"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_item_title"
-            tools:text="Tony Cheng"/>
+                android:id="@+id/tv_item_author"
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_item_avatar"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_item_title"
+                tools:text="Tony Cheng"/>
 
         <ImageView
-            android:id="@+id/iv_item_watch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_item_author"
-            app:layout_constraintTop_toBottomOf="@+id/tv_item_author"/>
+                android:id="@+id/iv_item_watch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_item_watch"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_item_author"
+                app:layout_constraintTop_toBottomOf="@+id/tv_item_author"
+                />
 
         <TextView
-            android:id="@+id/tv_item_watch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/iv_item_watch"
-            app:layout_constraintTop_toBottomOf="@+id/tv_item_author"
-            app:layout_constraintVertical_bias="0.23"
-            tools:text="12345"/>
+                android:id="@+id/tv_item_watch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="126dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/iv_item_watch"
+                app:layout_constraintTop_toBottomOf="@+id/tv_item_author"
+                tools:text="12345"
+                app:layout_constraintVertical_bias="1.0"/>
 
         <ImageView
-            android:id="@+id/iv_item_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_item_watch"
-            app:layout_constraintLeft_toRightOf="@+id/tv_item_watch"
-            app:layout_constraintTop_toTopOf="@+id/iv_item_watch"
-            app:layout_constraintVertical_bias="0.0"/>
+                android:id="@+id/iv_item_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_item_comment"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_item_watch"
+                app:layout_constraintLeft_toRightOf="@+id/tv_item_watch"
+                app:layout_constraintTop_toTopOf="@+id/iv_item_watch"
+                app:layout_constraintVertical_bias="0.0"/>
 
         <TextView
-            android:id="@+id/tv_item_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/iv_item_comment"
-            app:layout_constraintTop_toBottomOf="@+id/iv_item_shots"
-            tools:text="2345"
-            />
+                android:id="@+id/tv_item_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/iv_item_comment"
+                app:layout_constraintTop_toBottomOf="@+id/tv_item_title"
+                tools:text="2345"
+                app:layout_constraintVertical_bias="1.0"/>
 
         <ImageView
-            android:id="@+id/iv_item_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_item_comment"
-            app:layout_constraintLeft_toRightOf="@+id/tv_item_comment"
-            app:layout_constraintTop_toTopOf="@+id/iv_item_comment"
-            app:layout_constraintVertical_bias="1.0"/>
+                android:id="@+id/iv_item_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:srcCompat="@drawable/ic_item_favorite"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_item_comment"
+                app:layout_constraintLeft_toRightOf="@+id/tv_item_comment"
+                app:layout_constraintTop_toTopOf="@+id/iv_item_comment"
+                app:layout_constraintVertical_bias="1.0"/>
 
         <TextView
-            android:id="@+id/tv_item_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/iv_item_favorite"
-            app:layout_constraintTop_toBottomOf="@+id/iv_item_shots"
-            tools:text="123"
-            />
+                android:id="@+id/tv_item_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/iv_item_favorite"
+                app:layout_constraintTop_toBottomOf="@+id/iv_item_shots"
+                tools:text="123"
+                app:layout_constraintVertical_bias="1.0"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

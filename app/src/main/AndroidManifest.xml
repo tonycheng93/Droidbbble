@@ -5,25 +5,27 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-            android:name=".DroidbbbleApp"
+            android:name="com.sky.droidbbble.DroidbbbleApp"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+
+        <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="8ea0ed1cfe5ce00150f6f58f9a6b0700c1953c40"/>
+
         <activity
-                android:name=".ui.main.MainActivity"
+                android:name="com.sky.droidbbble.ui.main.MainActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <meta-data
-                android:name="io.fabric.ApiKey"
-                android:value="8ea0ed1cfe5ce00150f6f58f9a6b0700c1953c40"/>
     </application>
+
 </manifest>
