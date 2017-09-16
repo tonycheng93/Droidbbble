@@ -1,13 +1,9 @@
 package com.sky.droidbbble;
 
 import android.app.Application;
-import android.widget.TabHost;
 
-import com.bumptech.glide.Glide;
 import com.sky.dribbble.BuildConfig;
 import com.sky.droidbbble.utils.FontsManager;
-import com.sky.imageloader.glide.GlideApp;
-import com.sky.imageloader.glide.transformations.RoundCornerTransform;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
