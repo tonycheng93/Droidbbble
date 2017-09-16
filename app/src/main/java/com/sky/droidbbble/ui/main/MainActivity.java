@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import com.sky.dribbble.R;
 import com.sky.droidbbble.data.model.Shots;
 import com.sky.droidbbble.data.model.User;
-import com.sky.droidbbble.ui.main.PagerAdapter;
 import com.sky.droidbbble.ui.shots.ShotsFragment;
 import com.sky.droidbbble.ui.user.IUserView;
 import com.sky.droidbbble.ui.user.UserPresenter;
@@ -35,7 +34,8 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IUserView, ShotsFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IUserView, ShotsFragment
+        .OnListFragmentInteractionListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity
         });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string
+                .navigation_drawer_close);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity
 //        mTabLayout.addTab(mTabLayout.newTab().setText("Shots"));
 //        mTabLayout.addTab(mTabLayout.newTab().setText("Following"));
 
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), mFragments, mTabTitles);
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), mFragments,
+                mTabTitles);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 

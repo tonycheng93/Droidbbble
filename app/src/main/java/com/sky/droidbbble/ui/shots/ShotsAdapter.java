@@ -32,7 +32,8 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
     private final List<Shots> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public ShotsAdapter(Context context, List<Shots> items, OnListFragmentInteractionListener listener) {
+    public ShotsAdapter(Context context, List<Shots> items,
+                        OnListFragmentInteractionListener listener) {
         mContext = context;
         mValues = items;
         mListener = listener;
@@ -75,7 +76,8 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
             }
             final String name = user.getName();
             if (!TextUtils.isEmpty(name)) {
-                holder.mAuthorView.setText(String.format(mContext.getResources().getString(R.string.shots_author),name));
+                holder.mAuthorView.setText(String.format(mContext.getResources().getString(R
+                        .string.shots_author), name));
             }
         }
         final String title = shots.getTitle();
@@ -83,9 +85,9 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
             holder.mTitleView.setSelected(true);
             holder.mTitleView.setText(title);
         }
-        holder.mWatchCountView.setText(String.valueOf(shots.getViews_count()));
-        holder.mCommentCountView.setText(String.valueOf(shots.getComments_count()));
-        holder.mFavoriteCountView.setText(String.valueOf(shots.getLikes_count()));
+        holder.mWatchCountView.setText(String.valueOf(shots.getViewsCount()));
+        holder.mCommentCountView.setText(String.valueOf(shots.getCommentsCount()));
+        holder.mFavoriteCountView.setText(String.valueOf(shots.getLikesCount()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

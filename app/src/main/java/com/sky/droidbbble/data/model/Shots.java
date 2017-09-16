@@ -3,6 +3,8 @@ package com.sky.droidbbble.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by tonycheng on 2017/9/8.
  */
@@ -21,11 +23,14 @@ public class Shots implements Parcelable {
 
     private Image images;
 
-    private int views_count;
+    @SerializedName("views_count")
+    private int viewsCount;
 
-    private int likes_count;
+    @SerializedName("likes_count")
+    private int likesCount;
 
-    private int comments_count;
+    @SerializedName("comments_count")
+    private int commentsCount;
 
     private User user;
 
@@ -77,28 +82,28 @@ public class Shots implements Parcelable {
         this.images = images;
     }
 
-    public int getViews_count() {
-        return views_count;
+    public int getViewsCount() {
+        return viewsCount;
     }
 
-    public void setViews_count(int views_count) {
-        this.views_count = views_count;
+    public void setViewsCount(int viewsCount) {
+        this.viewsCount = viewsCount;
     }
 
-    public int getLikes_count() {
-        return likes_count;
+    public int getLikesCount() {
+        return likesCount;
     }
 
-    public void setLikes_count(int likes_count) {
-        this.likes_count = likes_count;
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
-    public int getComments_count() {
-        return comments_count;
+    public int getCommentsCount() {
+        return commentsCount;
     }
 
-    public void setComments_count(int comments_count) {
-        this.comments_count = comments_count;
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
     public User getUser() {
@@ -118,9 +123,9 @@ public class Shots implements Parcelable {
                 ", width=" + width +
                 ", height=" + height +
                 ", images=" + images +
-                ", views_count=" + views_count +
-                ", likes_count=" + likes_count +
-                ", comments_count=" + comments_count +
+                ", viewsCount=" + viewsCount +
+                ", likesCount=" + likesCount +
+                ", commentsCount=" + commentsCount +
                 ", user=" + user +
                 '}';
     }
@@ -137,10 +142,10 @@ public class Shots implements Parcelable {
         dest.writeString(this.description);
         dest.writeInt(this.width);
         dest.writeInt(this.height);
-        dest.writeParcelable(this.images,flags);
-        dest.writeInt(this.views_count);
-        dest.writeInt(this.likes_count);
-        dest.writeInt(this.comments_count);
+        dest.writeParcelable(this.images, flags);
+        dest.writeInt(this.viewsCount);
+        dest.writeInt(this.likesCount);
+        dest.writeInt(this.commentsCount);
         dest.writeParcelable(this.user, flags);
     }
 
@@ -154,9 +159,9 @@ public class Shots implements Parcelable {
         this.width = in.readInt();
         this.height = in.readInt();
         this.images = in.readParcelable(Image.class.getClassLoader());
-        this.views_count = in.readInt();
-        this.likes_count = in.readInt();
-        this.comments_count = in.readInt();
+        this.viewsCount = in.readInt();
+        this.likesCount = in.readInt();
+        this.commentsCount = in.readInt();
         this.user = in.readParcelable(User.class.getClassLoader());
     }
 

@@ -29,7 +29,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private RecyclerView mRecyclerView;
     private ShotsPresenter mShotsPresenter;
     private static final int PER_PAGE = 10;
-    private int page = 1;
+    private int mPage = 1;
     private ShotsAdapter mShotsAdapter;
     private List<Shots> mShotsList = new ArrayList<>();
 
@@ -66,14 +66,14 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         mShotsPresenter = new ShotsPresenter();
         mShotsPresenter.attachView(this);
-        mShotsPresenter.getShots(PER_PAGE, page);
+        mShotsPresenter.getShots(PER_PAGE, mPage);
 
         return view;
     }
 
     @Override
     public void onRefresh() {
-        mShotsPresenter.getShots(PER_PAGE, page);
+        mShotsPresenter.getShots(PER_PAGE, mPage);
     }
 
     @Override

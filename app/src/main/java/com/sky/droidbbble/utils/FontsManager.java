@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import timber.log.Timber;
+
 /**
  * Created by tonycheng on 2017/9/13.
  */
@@ -90,7 +92,7 @@ public class FontsManager {
                 //PS:Button,EditTextView all extends TextView
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e.toString());
         }
     }
 
@@ -111,7 +113,7 @@ public class FontsManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e.toString());
         }
     }
 }

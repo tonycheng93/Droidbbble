@@ -20,6 +20,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleService> {
 
+    private static final String ACCESS_TOAKEN =
+            "Bearer 4bedf7d503cec5b96a2f10a2d4bfac414a9e33353849cdd39bbcb99ab2b526d8";
+
     private DroidbbbleHttpMethod() {
     }
 
@@ -44,7 +47,7 @@ public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleService> {
     @Override
     protected Map<String, String> getHeaders() {
         Map<String, String> headers = new ArrayMap<>();
-        headers.put("Authorization", "Bearer 4bedf7d503cec5b96a2f10a2d4bfac414a9e33353849cdd39bbcb99ab2b526d8");
+        headers.put("Authorization", ACCESS_TOAKEN);
         return headers;
     }
 
