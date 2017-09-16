@@ -75,7 +75,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
             }
             final String name = user.getName();
             if (!TextUtils.isEmpty(name)) {
-                holder.mAuthorView.setText(name);
+                holder.mAuthorView.setText(String.format(mContext.getResources().getString(R.string.shots_author),name));
             }
         }
         final String title = shots.getTitle();
