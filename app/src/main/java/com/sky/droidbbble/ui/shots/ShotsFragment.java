@@ -31,7 +31,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private static final int PER_PAGE = 10;
     private int mPage = 1;
     private ShotsAdapter mShotsAdapter;
-    private List<Shots> mShotsList = new ArrayList<>();
+    private List<Shots> mShotsList;
 
     private OnListFragmentInteractionListener mListener;
 
@@ -73,6 +73,10 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
+        mPage = 1;
+        if (mShotsList != null && mShotsList.size() > 0) {
+            mShotsList.clear();
+        }
         mShotsPresenter.getShots(PER_PAGE, mPage);
     }
 
@@ -83,7 +87,10 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void showShots(List<Shots> shotsList) {
-        mShotsList = shotsList;
+        if (mShotsList == null) {
+            mShotsList = new ArrayList<>();
+        }
+        mShotsList.addAll(shotsList);
         mShotsAdapter = new ShotsAdapter(getActivity(), mShotsList, mListener);
         mRecyclerView.setAdapter(mShotsAdapter);
     }
@@ -124,6 +131,16 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
+            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
+                    .getLayoutManager();
+            int totalItemCount = recyclerView.getAdapter().getItemCount();
+            int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+            if (lastVisibleItemPosition == totalItemCount - 1
+                    && newState == RecyclerView.SCROLL_STATE_IDLE
+                    && lastVisibleItemPosition > 0) {
+                mPage++;
+                mShotsPresenter.getShots(PER_PAGE, mPage);
+            }
         }
 
         @Override

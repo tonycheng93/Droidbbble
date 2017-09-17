@@ -24,7 +24,6 @@ import com.sky.droidbbble.data.model.User;
 import com.sky.droidbbble.ui.shots.ShotsFragment;
 import com.sky.droidbbble.ui.user.IUserView;
 import com.sky.droidbbble.ui.user.UserPresenter;
-import com.sky.imageloader.ImageLoaderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,14 +164,16 @@ public class MainActivity extends AppCompatActivity
         if (user == null) {
             return;
         }
-        ImageView avatarView = (ImageView) mDrawerLayout.findViewById(R.id.iv_nav_avatar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ImageView avatarView = (ImageView) drawer.findViewById(R.id.iv_nav_avatar);
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-            ImageLoaderFactory.getImageLoader()
-                    .with(this)
-                    .load(avatarUrl)
-                    .circle(100)
-                    .into(avatarView);
+            Timber.d("avatarView = " + avatarView);
+//            ImageLoaderFactory.getImageLoader()
+//                    .with(this)
+//                    .load(avatarUrl)
+//                    .circle(100)
+//                    .into(avatarView);
         }
     }
 

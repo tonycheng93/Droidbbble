@@ -1,6 +1,7 @@
 package com.sky.droidbbble.ui.shots;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.sky.droidbbble.data.model.Image;
 import com.sky.droidbbble.data.model.Shots;
 import com.sky.droidbbble.data.model.User;
 import com.sky.droidbbble.ui.shots.ShotsFragment.OnListFragmentInteractionListener;
+import com.sky.droidbbble.ui.shots.detail.ShotsDetailActivity;
 import com.sky.droidbbble.utils.FontsManager;
 import com.sky.imageloader.ImageLoaderFactory;
 
@@ -96,6 +98,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
+                    mContext.startActivity(new Intent(mContext, ShotsDetailActivity.class));
                 }
             }
         });

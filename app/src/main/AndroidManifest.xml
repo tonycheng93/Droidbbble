@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.sky.dribbble">
+<manifest package="com.sky.dribbble"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-            android:name="com.sky.droidbbble.DroidbbbleApp"
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-
+        android:name="com.sky.droidbbble.DroidbbbleApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <meta-data
-                android:name="io.fabric.ApiKey"
-                android:value="8ea0ed1cfe5ce00150f6f58f9a6b0700c1953c40"/>
+            android:name="io.fabric.ApiKey"
+            android:value="8ea0ed1cfe5ce00150f6f58f9a6b0700c1953c40"/>
 
         <activity
-                android:name="com.sky.droidbbble.ui.main.MainActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+            android:name="com.sky.droidbbble.ui.main.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sky.droidbbble.ui.shots.detail.ShotsDetailActivity"
+            android:label="@string/title_activity_shots_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
