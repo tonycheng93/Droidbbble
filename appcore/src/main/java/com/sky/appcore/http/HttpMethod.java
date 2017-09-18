@@ -1,6 +1,9 @@
 package com.sky.appcore.http;
 
+import com.google.gson.Gson;
+
 import android.support.v4.BuildConfig;
+import android.text.TextUtils;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -43,13 +46,46 @@ public abstract class HttpMethod<T> {
 
     protected abstract Map<String, String> getHeaders();
 
+    //optional method
+    protected int getConnectTimeOut() {
+        return 0;
+    }
+
+    protected int getReadTimeOut() {
+        return 0;
+    }
+
+    protected int getWriteTimeOut() {
+        return 0;
+    }
+
+    protected OkHttpClient getOkHttpClient() {
+        return null;
+    }
+
+    protected Gson getGson() {
+        return null;
+    }
+
     public HttpMethod() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getBaseUrl())
-                .client(createOkHttpClient())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Retrofit.Builder builder = new Retrofit.Builder();
+        if (!TextUtils.isEmpty(getBaseUrl())) {
+            builder.baseUrl(getBaseUrl());
+        } else {
+            throw new IllegalArgumentException("base url can not be null.");
+        }
+        if (getOkHttpClient() != null) {
+            builder.client(getOkHttpClient());
+        } else {
+            builder.client(createOkHttpClient());
+        }
+        if (getGson() != null) {
+            builder.addConverterFactory(GsonConverterFactory.create(getGson()));
+        } else {
+            builder.addConverterFactory(GsonConverterFactory.create());
+        }
+        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+        Retrofit retrofit = builder.build();
         mService = retrofit.create(getServiceClazz());
     }
 
@@ -59,9 +95,21 @@ public abstract class HttpMethod<T> {
 
     private OkHttpClient createOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS);
-        builder.readTimeout(READ_TIME_OUT, TimeUnit.SECONDS);
-        builder.writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS);
+        if (getConnectTimeOut() == 0) {
+            builder.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS);
+        } else {
+            builder.connectTimeout(getConnectTimeOut(), TimeUnit.SECONDS);
+        }
+        if (getReadTimeOut() == 0) {
+            builder.readTimeout(READ_TIME_OUT, TimeUnit.SECONDS);
+        } else {
+            builder.readTimeout(getReadTimeOut(), TimeUnit.SECONDS);
+        }
+        if (getWriteTimeOut() == 0) {
+            builder.writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS);
+        } else {
+            builder.writeTimeout(getWriteTimeOut(), TimeUnit.SECONDS);
+        }
         builder.retryOnConnectionFailure(true);
 
         try {
