@@ -30,15 +30,23 @@ import butterknife.ButterKnife;
  */
 public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> {
 
+    private static final String TAG = "ShotsAdapter";
+
     private Context mContext;
-    private final List<Shots> mValues;
+    private List<Shots> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public ShotsAdapter(Context context, List<Shots> items,
-                        OnListFragmentInteractionListener listener) {
+    public ShotsAdapter(Context context, OnListFragmentInteractionListener listener) {
         mContext = context;
-        mValues = items;
         mListener = listener;
+    }
+
+    public void setData(List<Shots> shotsList) {
+        mValues = shotsList;
+    }
+
+    public List<Shots> getData() {
+        return mValues;
     }
 
     @Override
@@ -106,7 +114,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mValues == null ? 0 : mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
