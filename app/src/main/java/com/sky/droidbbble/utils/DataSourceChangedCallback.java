@@ -1,4 +1,4 @@
-package com.sky.droidbbble.ui.shots;
+package com.sky.droidbbble.utils;
 
 import android.support.v7.util.ListUpdateCallback;
 
@@ -6,9 +6,9 @@ import android.support.v7.util.ListUpdateCallback;
  * Created by tonycheng on 2017/9/19.
  */
 
-public abstract class ShotsListUpdateCallback implements ListUpdateCallback {
+public abstract class DataSourceChangedCallback implements ListUpdateCallback {
 
-    abstract void onListChanged();
+    public abstract void onDataSourceChanged();
 
     @Override
     public void onInserted(int position, int count) {
@@ -16,16 +16,16 @@ public abstract class ShotsListUpdateCallback implements ListUpdateCallback {
 
     @Override
     public void onRemoved(int position, int count) {
-        onListChanged();
+        onDataSourceChanged();
     }
 
     @Override
     public void onMoved(int fromPosition, int toPosition) {
-        onListChanged();
+        onDataSourceChanged();
     }
 
     @Override
     public void onChanged(int position, int count, Object payload) {
-        onListChanged();
+        onDataSourceChanged();
     }
 }

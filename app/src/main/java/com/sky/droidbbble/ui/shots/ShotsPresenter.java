@@ -5,6 +5,7 @@ import android.support.v7.util.DiffUtil;
 import com.sky.appcore.mvp.presenter.BasePresenter;
 import com.sky.droidbbble.data.DataManager;
 import com.sky.droidbbble.data.model.Shots;
+import com.sky.droidbbble.utils.DataSourceChangedCallback;
 import com.sky.droidbbble.utils.RxUtil;
 
 import java.util.ArrayList;
@@ -76,9 +77,9 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
                             } else {
                                 final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
                                         new ShotsDiffCallback(mCachedShotsList, shotsList), false);
-                                diffResult.dispatchUpdatesTo(new ShotsListUpdateCallback() {
+                                diffResult.dispatchUpdatesTo(new DataSourceChangedCallback() {
                                     @Override
-                                    void onListChanged() {
+                                    public void onDataSourceChanged() {
                                         mCachedShotsList = shotsList;
                                         if (shotsList.isEmpty()) {
                                             getMvpView().showEmpty();
