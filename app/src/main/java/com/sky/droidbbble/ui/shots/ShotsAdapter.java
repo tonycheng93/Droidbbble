@@ -19,6 +19,7 @@ import com.sky.droidbbble.ui.shots.detail.ShotsDetailActivity;
 import com.sky.droidbbble.utils.FontsManager;
 import com.sky.imageloader.ImageLoaderFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,6 +39,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
 
     public ShotsAdapter(Context context, OnListFragmentInteractionListener listener) {
         mContext = context;
+        mValues = Collections.emptyList();
         mListener = listener;
     }
 

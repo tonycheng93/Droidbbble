@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.util.BatchingListUpdateCallback;
-import android.support.v7.util.ListUpdateCallback;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 
 import com.sky.dribbble.R;
 import com.sky.droidbbble.data.model.Shots;
-import com.sky.droidbbble.utils.DiffUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +54,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -65,7 +63,6 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
-        mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -77,23 +74,28 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         mShotsPresenter = new ShotsPresenter();
         mShotsPresenter.attachView(this);
-        mShotsPresenter.getShots(PER_PAGE, mPage);
 
         return view;
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mShotsPresenter.getShots(PER_PAGE, 1);
+    }
+
+    @Override
     public void onRefresh() {
+        Timber.d("invoke onRefresh");
         mPage = 1;
-//        if (mShotsList != null && mShotsList.size() > 0) {
-//            mShotsList.clear();
-//        }
         mShotsPresenter.getShots(PER_PAGE, mPage);
     }
 
     @Override
     public void showLoading() {
-        mRefreshLayout.setRefreshing(true);
+        if (!isRefreshing()) {
+            mRefreshLayout.setRefreshing(true);
+        }
     }
 
     @Override
@@ -101,53 +103,39 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         if (mShotsList == null) {
             mShotsList = new ArrayList<>();
         }
-//        mShotsList.addAll(shotsList);
-//        mShotsAdapter.setData(mShotsList);
-//        mShotsAdapter.notifyDataSetChanged();
-        List<Shots> oldList = mShotsAdapter.getData();
-        ShotsDiffCallback callback = new ShotsDiffCallback(oldList, shotsList);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, false);
-        mShotsAdapter.setData(shotsList);
-        diffResult.dispatchUpdatesTo(mShotsAdapter);
-//        diffResult.dispatchUpdatesTo(new BatchingListUpdateCallback(new ListUpdateCallback() {
-//            @Override
-//            public void onInserted(int position, int count) {
-//                Timber.d("onInserted: position = " + position + ", count = " + count);
-//                mShotsAdapter.notifyItemRangeInserted(position, count);
-//            }
-//
-//            @Override
-//            public void onRemoved(int position, int count) {
-//                Timber.d("onRemoved: position = " + position + ", count = " + count);
-//            }
-//
-//            @Override
-//            public void onMoved(int fromPosition, int toPosition) {
-//                Timber.d("onMoved: fromPosition = " + fromPosition + ", toPosition = " + toPosition);
-//            }
-//
-//            @Override
-//            public void onChanged(int position, int count, Object payload) {
-//                Timber.d("onChanged: position = " + position + ", count = " + count + ", payload = " + payload);
-//            }
-//        }));
+        mShotsList.addAll(shotsList);
+        mShotsAdapter.setData(mShotsList);
+        mShotsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showEmpty() {
-        mRefreshLayout.setRefreshing(false);
+        if (isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+        }
         Toast.makeText(getActivity(), "shots is empty.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void hideLoading() {
-        mRefreshLayout.setRefreshing(false);
+        if (isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
     public void showError() {
-        mRefreshLayout.setRefreshing(false);
+        if (isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+        }
         Toast.makeText(getActivity(), "something error", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * check is loading
+     */
+    private boolean isRefreshing() {
+        return mRefreshLayout.isRefreshing();
     }
 
     @Override
@@ -178,8 +166,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             if (lastVisibleItemPosition == totalItemCount - 1
                     && newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItemPosition > 0) {
-                mPage++;
-                mShotsPresenter.getShots(PER_PAGE, mPage);
+                mShotsPresenter.getShots(PER_PAGE, ++mPage);
             }
         }
 

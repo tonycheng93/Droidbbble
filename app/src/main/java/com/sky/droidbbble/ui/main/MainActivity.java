@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
             mFragments = new ArrayList<>();
         }
         mFragments.add(ShotsFragment.newInstance());
-        mFragments.add(ShotsFragment.newInstance());
+//        mFragments.add(ShotsFragment.newInstance());
 
         if (mTabTitles == null) {
             mTabTitles = new ArrayList<>();
