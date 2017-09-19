@@ -5,6 +5,7 @@ import android.support.v7.util.DiffUtil;
 import com.sky.appcore.mvp.presenter.BasePresenter;
 import com.sky.droidbbble.data.DataManager;
 import com.sky.droidbbble.data.model.Shots;
+import com.sky.droidbbble.utils.RxUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,14 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
     private Disposable mDisposable = null;
     /**
      * 这个集合是用来缓存上一次下拉刷新时的数据，增加一个这个集合的目的是：
-     * 避免重复的数据，因为下拉刷新是存在服务器数据并未更新，此时不应该通知
+     * 避免重复的数据，因为下拉刷新时存在服务器数据并未更新情况，此时不应该通知
      * Adapter数据源发生变化。
      */
     private List<Shots> mCachedShotsList = new ArrayList<>();
 
+    /**
+     * 是否第一次加载数据，此时是不需要进行数据源对比，避免浪费性能
+     */
     private boolean isFirstAddShots = true;
 
     @Override
@@ -46,6 +50,7 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
     public void getShots(int perPage, final int page) {
         Timber.d("page = " + page);
         checkViewAttached();
+        RxUtil.dispose(mDisposable);
         if (page == 1) {
             getMvpView().showLoading();
         }
@@ -73,15 +78,12 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
                                         new ShotsDiffCallback(mCachedShotsList, shotsList), false);
                                 diffResult.dispatchUpdatesTo(new ShotsListUpdateCallback() {
                                     @Override
-                                    void onListChanged(boolean changed) {
-                                        Timber.d("onListChanged: changed = " + changed);
-                                        if (changed) {
-                                            mCachedShotsList = shotsList;
-                                            if (shotsList.isEmpty()) {
-                                                getMvpView().showEmpty();
-                                            } else {
-                                                getMvpView().showShots(shotsList);
-                                            }
+                                    void onListChanged() {
+                                        mCachedShotsList = shotsList;
+                                        if (shotsList.isEmpty()) {
+                                            getMvpView().showEmpty();
+                                        } else {
+                                            getMvpView().showShots(shotsList);
                                         }
                                     }
                                 });

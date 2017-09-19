@@ -8,7 +8,7 @@ import android.support.v7.util.ListUpdateCallback;
 
 public abstract class ShotsListUpdateCallback implements ListUpdateCallback {
 
-    abstract void onListChanged(boolean changed);
+    abstract void onListChanged();
 
     @Override
     public void onInserted(int position, int count) {
@@ -16,16 +16,16 @@ public abstract class ShotsListUpdateCallback implements ListUpdateCallback {
 
     @Override
     public void onRemoved(int position, int count) {
-        onListChanged(true);
+        onListChanged();
     }
 
     @Override
     public void onMoved(int fromPosition, int toPosition) {
-        onListChanged(true);
+        onListChanged();
     }
 
     @Override
     public void onChanged(int position, int count, Object payload) {
-        onListChanged(true);
+        onListChanged();
     }
 }
