@@ -24,6 +24,7 @@ import com.sky.droidbbble.data.model.User;
 import com.sky.droidbbble.ui.shots.ShotsFragment;
 import com.sky.droidbbble.ui.user.IUserView;
 import com.sky.droidbbble.ui.user.UserPresenter;
+import com.sky.droidbbble.utils.FontsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+        FontsManager.changeFonts(mToolbar);
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity
                 mTabTitles);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        FontsManager.changeFonts(mTabLayout);
 
         if (mUserPresenter == null) {
             mUserPresenter = new UserPresenter();

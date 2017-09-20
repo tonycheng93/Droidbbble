@@ -137,7 +137,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     /**
-     * check is loading
+     * check whether the SwipeRefreshLayout is loading
      */
     private boolean isRefreshing() {
         return mRefreshLayout.isRefreshing();

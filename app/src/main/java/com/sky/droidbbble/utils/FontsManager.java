@@ -24,7 +24,7 @@ public class FontsManager {
     private static Typeface defaultTypeface = null;
 
     private FontsManager() {
-        //unity class，no instance
+        //utility class，no instance
     }
 
     /**
