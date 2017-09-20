@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         mShotsPresenter = new ShotsPresenter();
         mShotsPresenter.attachView(this);
+        mShotsPresenter.getShots(PER_PAGE, 1);
 
         return view;
     }
@@ -81,7 +83,6 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onStart() {
         super.onStart();
-        mShotsPresenter.getShots(PER_PAGE, 1);
     }
 
     @Override
@@ -103,7 +104,11 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         if (mShotsList == null) {
             mShotsList = new ArrayList<>();
         }
-        mShotsList.addAll(shotsList);
+        if (mPage == 1) {
+            mShotsList.addAll(0, shotsList);
+        } else {
+            mShotsList.addAll(shotsList);
+        }
         mShotsAdapter.setData(mShotsList);
         mShotsAdapter.notifyDataSetChanged();
     }
@@ -166,7 +171,8 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             if (lastVisibleItemPosition == totalItemCount - 1
                     && newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItemPosition > 0) {
-                mShotsPresenter.getShots(PER_PAGE, ++mPage);
+                mPage = mPage + 1;
+                mShotsPresenter.getShots(PER_PAGE, mPage);
             }
         }
 

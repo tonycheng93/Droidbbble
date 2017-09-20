@@ -72,6 +72,7 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
                                 if (shotsList.isEmpty()) {
                                     getMvpView().showEmpty();
                                 } else {
+                                    Timber.d("this is the first add data.");
                                     getMvpView().showShots(shotsList);
                                 }
                             } else {
@@ -80,6 +81,7 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
                                 diffResult.dispatchUpdatesTo(new DataSourceChangedCallback() {
                                     @Override
                                     public void onDataSourceChanged() {
+                                        Timber.d("data source has changed,add new data.");
                                         mCachedShotsList = shotsList;
                                         if (shotsList.isEmpty()) {
                                             getMvpView().showEmpty();
@@ -108,6 +110,7 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
                     @Override
                     public void onComplete() {
                         Timber.d("onComplete");
+                        getMvpView().hideLoading();
                     }
                 });
     }
