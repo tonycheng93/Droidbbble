@@ -3,6 +3,7 @@ package com.sky.droidbbble.http;
 import android.support.v4.util.ArrayMap;
 
 import com.sky.appcore.http.HttpMethod;
+import com.sky.droidbbble.data.model.Comment;
 import com.sky.droidbbble.data.model.Shots;
 import com.sky.droidbbble.data.model.User;
 import com.sky.droidbbble.data.remote.DroidbbbleService;
@@ -51,14 +52,34 @@ public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleService> {
         return headers;
     }
 
+    /**
+     * get current user
+     */
     public Observable<User> getUser() {
         return getService().getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * get shots list
+     *
+     * @param perPage perPage shots list count
+     * @param page    page
+     */
     public Observable<List<Shots>> getShots(int perPage, int page) {
         return getService().getShots(perPage, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * get shots' comments
+     *
+     * @param id shots id
+     */
+    public Observable<List<Comment>> getComments(int id) {
+        return getService().getComments(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -1,5 +1,6 @@
 package com.sky.droidbbble.data;
 
+import com.sky.droidbbble.data.model.Comment;
 import com.sky.droidbbble.data.model.Shots;
 import com.sky.droidbbble.data.model.User;
 import com.sky.droidbbble.http.DroidbbbleHttpMethod;
@@ -36,5 +37,10 @@ public class DataManager {
     public Observable<List<Shots>> getShots(int perPage, int page) {
         return DroidbbbleHttpMethod.getInstance()
                 .getShots(perPage, page);
+    }
+
+    public Observable<List<Comment>> getComments(int id) {
+        return DroidbbbleHttpMethod.getInstance()
+                .getComments(id);
     }
 }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.sky.dribbble.R;
 import com.sky.droidbbble.data.model.Shots;
+import com.sky.droidbbble.widget.VegaLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;

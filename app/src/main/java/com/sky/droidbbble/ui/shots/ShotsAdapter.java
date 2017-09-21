@@ -108,7 +108,10 @@ public class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> 
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
-                    mContext.startActivity(new Intent(mContext, ShotsDetailActivity.class));
+
+                    Intent intent = new Intent(mContext, ShotsDetailActivity.class);
+                    intent.putExtra("item", holder.mItem);
+                    mContext.startActivity(intent);
                 }
             }
         });
