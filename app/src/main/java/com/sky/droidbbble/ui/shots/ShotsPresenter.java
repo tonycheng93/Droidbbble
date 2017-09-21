@@ -14,6 +14,7 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 /**
@@ -52,10 +53,15 @@ public class ShotsPresenter extends BasePresenter<IShotsView> {
         Timber.d("page = " + page);
         checkViewAttached();
         RxUtil.dispose(mDisposable);
-        if (page == 1) {
-            getMvpView().showLoading();
-        }
         DataManager.getInstance().getShots(perPage, page)
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        if (page == 1) {
+                            getMvpView().showLoading();
+                        }
+                    }
+                })
                 .subscribe(new Observer<List<Shots>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

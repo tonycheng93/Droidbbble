@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
-        FontsManager.changeFonts(mToolbar);
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,13 +97,18 @@ public class MainActivity extends AppCompatActivity
                 mTabTitles);
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        FontsManager.changeFonts(mTabLayout);
 
         if (mUserPresenter == null) {
             mUserPresenter = new UserPresenter();
         }
         mUserPresenter.attachView(this);
         mUserPresenter.getUser();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FontsManager.changeFonts(this);
     }
 
     @Override
