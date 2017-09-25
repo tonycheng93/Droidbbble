@@ -1,5 +1,8 @@
 package com.sky.droidbbble.http;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import android.support.v4.util.ArrayMap;
 
 import com.sky.appcore.http.HttpMethod;
@@ -43,6 +46,14 @@ public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleService> {
     @Override
     protected String getBaseUrl() {
         return "https://api.dribbble.com/v1/";
+    }
+
+    @Override
+    protected Gson getGson() {
+//        2017-09-20T15:00:35Z YYYY-MM-DDTHH:MM:SSZ
+        return new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .create();
     }
 
     @Override

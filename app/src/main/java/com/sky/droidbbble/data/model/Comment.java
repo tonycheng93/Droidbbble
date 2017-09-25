@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 /**
  * user comment
  */
@@ -21,9 +23,9 @@ public class Comment implements Parcelable {
     @SerializedName("likes_url")
     private String likesUrl;
     @SerializedName("created_at")
-    private String createdAt;
+    private Date createdAt;
     @SerializedName("updated_at")
-    private String updatedAt;
+    private Date updatedAt;
     private User user;
 
     public int getId() {
@@ -58,19 +60,19 @@ public class Comment implements Parcelable {
         this.likesUrl = likesUrl;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -95,6 +97,7 @@ public class Comment implements Parcelable {
                 '}';
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -106,8 +109,8 @@ public class Comment implements Parcelable {
         dest.writeString(this.body);
         dest.writeInt(this.likesCount);
         dest.writeString(this.likesUrl);
-        dest.writeString(this.createdAt);
-        dest.writeString(this.updatedAt);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+        dest.writeLong(this.updatedAt != null ? this.updatedAt.getTime() : -1);
         dest.writeParcelable(this.user, flags);
     }
 
@@ -119,8 +122,10 @@ public class Comment implements Parcelable {
         this.body = in.readString();
         this.likesCount = in.readInt();
         this.likesUrl = in.readString();
-        this.createdAt = in.readString();
-        this.updatedAt = in.readString();
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        long tmpUpdatedAt = in.readLong();
+        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
         this.user = in.readParcelable(User.class.getClassLoader());
     }
 
