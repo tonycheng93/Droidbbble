@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.sky.dribbble.R;
 import com.sky.droidbbble.data.model.Shots;
@@ -39,16 +38,16 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.nav_view)
-    NavigationView mNavigationView;
     @BindView(R.id.tabLayout)
     TabLayout mTabLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPager;
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+    @BindView(R.id.nav_view)
+    NavigationView mNavView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
     private UserPresenter mUserPresenter;
     private List<Fragment> mFragments;
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        mNavigationView.setNavigationItemSelectedListener(this);
+        mNavView.setNavigationItemSelectedListener(this);
 
         if (mFragments == null) {
             mFragments = new ArrayList<>();
@@ -171,11 +170,10 @@ public class MainActivity extends AppCompatActivity
         if (user == null) {
             return;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ImageView avatarView = (ImageView) drawer.findViewById(R.id.iv_nav_avatar);
+
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-            Timber.d("avatarView = " + avatarView);
+//            Timber.d("avatarView = " + avatarView);
 //            ImageLoaderFactory.getImageLoader()
 //                    .with(this)
 //                    .load(avatarUrl)
