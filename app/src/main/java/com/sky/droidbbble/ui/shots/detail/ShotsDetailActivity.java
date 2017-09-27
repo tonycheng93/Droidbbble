@@ -71,7 +71,6 @@ public class ShotsDetailActivity extends AppCompatActivity implements ICommentVi
                     ImageLoaderFactory.getImageLoader()
                             .with(this)
                             .load(url)
-                            .setScaleType(ImageView.ScaleType.CENTER_CROP)
                             .into(mIvImage);
                 }
             }
