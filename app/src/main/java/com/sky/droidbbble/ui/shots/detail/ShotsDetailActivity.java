@@ -16,8 +16,10 @@ import com.sky.droidbbble.data.model.Comment;
 import com.sky.droidbbble.data.model.Image;
 import com.sky.droidbbble.data.model.Shots;
 import com.sky.droidbbble.data.model.User;
+import com.sky.droidbbble.utils.DateUtil;
 import com.sky.imageloader.ImageLoaderFactory;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -89,7 +91,10 @@ public class ShotsDetailActivity extends AppCompatActivity implements ICommentVi
                 if (!TextUtils.isEmpty(name)) {
                     mTvAuthor.setText(name);
                 }
-                mTvTime.setText("2017-09-22");
+            }
+            final Date createdAt = shots.getCreatedAt();
+            if (createdAt != null) {
+                mTvTime.setText(DateUtil.parseTime(createdAt.getTime()));
             }
             final int shotsId = shots.getId();
             CommentPresenter commentPresenter = new CommentPresenter();
