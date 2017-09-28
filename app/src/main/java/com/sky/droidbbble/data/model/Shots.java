@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * Created by tonycheng on 2017/9/8.
  */
@@ -31,6 +33,9 @@ public class Shots implements Parcelable {
 
     @SerializedName("comments_count")
     private int commentsCount;
+
+    @SerializedName("created_at")
+    private Date createdAt;
 
     private User user;
 
@@ -106,6 +111,14 @@ public class Shots implements Parcelable {
         this.commentsCount = commentsCount;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public User getUser() {
         return user;
     }
@@ -126,6 +139,7 @@ public class Shots implements Parcelable {
                 ", viewsCount=" + viewsCount +
                 ", likesCount=" + likesCount +
                 ", commentsCount=" + commentsCount +
+                ", createdAt=" + createdAt +
                 ", user=" + user +
                 '}';
     }
@@ -146,6 +160,7 @@ public class Shots implements Parcelable {
         dest.writeInt(this.viewsCount);
         dest.writeInt(this.likesCount);
         dest.writeInt(this.commentsCount);
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
         dest.writeParcelable(this.user, flags);
     }
 
@@ -162,6 +177,8 @@ public class Shots implements Parcelable {
         this.viewsCount = in.readInt();
         this.likesCount = in.readInt();
         this.commentsCount = in.readInt();
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
         this.user = in.readParcelable(User.class.getClassLoader());
     }
 
