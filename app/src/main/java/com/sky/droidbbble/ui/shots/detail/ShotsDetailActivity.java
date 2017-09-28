@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +37,8 @@ public class ShotsDetailActivity extends AppCompatActivity implements ICommentVi
     ImageView mIvAvatar;
     @BindView(R.id.tv_shots_detail_author)
     TextView mTvAuthor;
+    @BindView(R.id.tv_shots_detail_desc)
+    TextView mTvDesc;
     @BindView(R.id.tv_shots_detail_time)
     TextView mTvTime;
     @BindView(R.id.recycler_view)
@@ -91,6 +94,10 @@ public class ShotsDetailActivity extends AppCompatActivity implements ICommentVi
                 if (!TextUtils.isEmpty(name)) {
                     mTvAuthor.setText(name);
                 }
+            }
+            final String description = shots.getDescription();
+            if (!TextUtils.isEmpty(description)) {
+                mTvDesc.setText(Html.fromHtml(description));
             }
             final Date createdAt = shots.getCreatedAt();
             if (createdAt != null) {
