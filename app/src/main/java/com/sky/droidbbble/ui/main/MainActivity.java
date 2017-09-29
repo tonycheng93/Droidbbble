@@ -16,14 +16,17 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.sky.dribbble.R;
+import com.sky.droidbbble.data.SyncService;
 import com.sky.droidbbble.data.model.Shots;
 import com.sky.droidbbble.data.model.User;
 import com.sky.droidbbble.ui.shots.ShotsFragment;
 import com.sky.droidbbble.ui.user.IUserView;
 import com.sky.droidbbble.ui.user.UserPresenter;
 import com.sky.droidbbble.utils.FontsManager;
+import com.sky.imageloader.ImageLoaderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +100,8 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setAdapter(pagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
+        startService(SyncService.getStartIntent(this));
+
         if (mUserPresenter == null) {
             mUserPresenter = new UserPresenter();
         }
@@ -167,18 +172,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showUser(User user) {
+        Timber.i("user = " + user);
         if (user == null) {
             return;
         }
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ImageView avatarView = navigationView.findViewById(R.id.iv_nav_avatar);
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
-//            Timber.d("avatarView = " + avatarView);
-//            ImageLoaderFactory.getImageLoader()
-//                    .with(this)
-//                    .load(avatarUrl)
-//                    .circle(100)
-//                    .into(avatarView);
+            Timber.d("avatarView = " + avatarView);
+            ImageLoaderFactory.getImageLoader()
+                    .with(this)
+                    .load(avatarUrl)
+                    .circle(100)
+                    .into(avatarView);
         }
     }
 

@@ -134,6 +134,7 @@ public class ShotsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         if (isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
         }
+        //这个地方会出现crash，因为ShotsFragment已经销毁了，但是还是要求弹出Toast
         Toast.makeText(getActivity(), "something error", Toast.LENGTH_SHORT).show();
     }
 

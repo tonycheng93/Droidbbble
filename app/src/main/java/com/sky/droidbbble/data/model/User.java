@@ -2,9 +2,12 @@ package com.sky.droidbbble.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@Entity(tableName = "user")
 public class User implements Parcelable {
 
     @SerializedName("avatar_url")
@@ -16,62 +19,98 @@ public class User implements Parcelable {
     @SerializedName("name")
     private String name;
 
+    @PrimaryKey
     @SerializedName("id")
     private int id;
 
     @SerializedName("username")
     private String username;
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
+    @SerializedName("bio")
+    private String bio;
+
+    @SerializedName("followings_count")
+    private int followingsCount;
+
+    @SerializedName("followers_count")
+    private int followersCount;
 
     public String getAvatarUrl() {
         return avatarUrl;
     }
 
-    public void setHtmlUrl(String htmlUrl) {
-        this.htmlUrl = htmlUrl;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getHtmlUrl() {
         return htmlUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public int getFollowingsCount() {
+        return followingsCount;
+    }
+
+    public void setFollowingsCount(int followingsCount) {
+        this.followingsCount = followingsCount;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public void setFollowersCount(int followersCount) {
+        this.followersCount = followersCount;
+    }
+
     @Override
     public String toString() {
-        return
-                "User{" +
-                        "avatar_url = '" + avatarUrl + '\'' +
-                        ",html_url = '" + htmlUrl + '\'' +
-                        ",name = '" + name + '\'' +
-                        ",id = '" + id + '\'' +
-                        ",username = '" + username + '\'' +
-                        "}";
+        return "User{" +
+                "avatarUrl='" + avatarUrl + '\'' +
+                ", htmlUrl='" + htmlUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                ", username='" + username + '\'' +
+                ", bio='" + bio + '\'' +
+                ", followingsCount=" + followingsCount +
+                ", followersCount=" + followersCount +
+                '}';
     }
 
     @Override
@@ -86,6 +125,9 @@ public class User implements Parcelable {
         dest.writeString(this.name);
         dest.writeInt(this.id);
         dest.writeString(this.username);
+        dest.writeString(this.bio);
+        dest.writeInt(this.followingsCount);
+        dest.writeInt(this.followersCount);
     }
 
     public User() {
@@ -97,6 +139,9 @@ public class User implements Parcelable {
         this.name = in.readString();
         this.id = in.readInt();
         this.username = in.readString();
+        this.bio = in.readString();
+        this.followingsCount = in.readInt();
+        this.followersCount = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

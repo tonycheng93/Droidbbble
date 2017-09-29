@@ -7,6 +7,7 @@ import com.sky.droidbbble.data.model.User;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -23,7 +24,7 @@ public interface DroidbbbleService {
      * @return {@link User}
      */
     @GET("user")
-    Observable<User> getUser();
+    Single<User> getUser();
 
     /**
      * get shots list

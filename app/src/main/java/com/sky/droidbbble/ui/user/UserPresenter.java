@@ -3,10 +3,12 @@ package com.sky.droidbbble.ui.user;
 import com.sky.appcore.mvp.presenter.BasePresenter;
 import com.sky.droidbbble.data.DataManager;
 import com.sky.droidbbble.data.model.User;
+import com.sky.droidbbble.utils.RxUtil;
 
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -34,29 +36,25 @@ public class UserPresenter extends BasePresenter<IUserView> {
 
     public void getUser() {
         checkViewAttached();
+        RxUtil.dispose(mDisposable);
         DataManager.getInstance()
                 .getUser()
-                .subscribe(new Observer<User>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<User>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
+                    public void onSubscribe(Disposable d) {
                         mDisposable = d;
                     }
 
                     @Override
-                    public void onNext(@NonNull User user) {
-                        Timber.d("onNext() current thread  = " + Thread.currentThread().getName());
+                    public void onSuccess(User user) {
                         getMvpView().showUser(user);
                     }
 
                     @Override
-                    public void onError(@NonNull Throwable e) {
-                        Timber.d("onError current thread  = " + Thread.currentThread());
-                        Timber.e("onError = " + e.toString());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Timber.d("onComplete");
+                    public void onError(Throwable e) {
+                        Timber.e(e,"load user failed.");
                     }
                 });
     }

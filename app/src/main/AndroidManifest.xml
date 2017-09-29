@@ -3,6 +3,7 @@
           package="com.sky.dribbble">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
             android:name="com.sky.droidbbble.DroidbbbleApp"
@@ -36,6 +37,14 @@
                 android:label="@string/title_activity_user_center"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <service
+                android:name="com.sky.droidbbble.data.SyncService">
+            <intent-filter>
+                <action android:name="droidbbble.action.intent.SYNC_SERVICE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

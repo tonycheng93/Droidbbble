@@ -1,6 +1,7 @@
 package com.sky.droidbbble;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.sky.dribbble.BuildConfig;
 import com.sky.droidbbble.utils.FontsManager;
@@ -23,6 +24,8 @@ import timber.log.Timber;
 
 public class DroidbbbleApp extends Application {
 
+    public static Context applicationContext;
+
     private static final String FONT_PATH = "fonts/Myriad-Pro-Light-Italic.otf";
 
 //    @Override
@@ -40,6 +43,7 @@ public class DroidbbbleApp extends Application {
 //            return;
 //        }
 //        LeakCanary.install(this);
+        applicationContext = getApplicationContext();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }

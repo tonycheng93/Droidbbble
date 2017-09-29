@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -66,10 +67,9 @@ public class DroidbbbleHttpMethod extends HttpMethod<DroidbbbleService> {
     /**
      * get current user
      */
-    public Observable<User> getUser() {
+    public Single<User> getUser() {
         return getService().getUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     /**
