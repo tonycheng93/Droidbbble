@@ -26,7 +26,6 @@ import com.sky.droidbbble.ui.shots.ShotsFragment;
 import com.sky.droidbbble.ui.user.IUserView;
 import com.sky.droidbbble.ui.user.UserPresenter;
 import com.sky.droidbbble.utils.FontsManager;
-import com.sky.imageloader.ImageLoaderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,11 +181,11 @@ public class MainActivity extends AppCompatActivity
         final String avatarUrl = user.getAvatarUrl();
         if (!TextUtils.isEmpty(avatarUrl)) {
             Timber.d("avatarView = " + avatarView);
-            ImageLoaderFactory.getImageLoader()
-                    .with(this)
-                    .load(avatarUrl)
-                    .circle(100)
-                    .into(avatarView);
+//            ImageLoaderFactory.getImageLoader()
+//                    .with(this)
+//                    .load(avatarUrl)
+//                    .circle(100)
+//                    .into(avatarView);
         }
     }
 

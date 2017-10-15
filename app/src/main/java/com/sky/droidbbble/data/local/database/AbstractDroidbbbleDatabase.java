@@ -11,7 +11,7 @@ import com.sky.droidbbble.data.model.User;
  */
 
 @Database(entities = {User.class}, version = 1)
-public abstract class DroidbbbleDatabase extends RoomDatabase {
+public abstract class AbstractDroidbbbleDatabase extends RoomDatabase {
 
     abstract public UserDao userDao();
 }
