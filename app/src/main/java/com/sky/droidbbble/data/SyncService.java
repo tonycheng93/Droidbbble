@@ -66,9 +66,7 @@ public class SyncService extends Service {
 
     @Override
     public void onDestroy() {
-        if (mDisposable != null && !mDisposable.isDisposed()) {
-            mDisposable.dispose();
-        }
+        RxUtil.dispose(mDisposable);
         super.onDestroy();
     }
 }
