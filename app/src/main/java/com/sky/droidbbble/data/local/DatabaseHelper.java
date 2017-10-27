@@ -3,7 +3,7 @@ package com.sky.droidbbble.data.local;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
-import com.sky.droidbbble.data.local.database.DroidbbbleDatabase;
+import com.sky.droidbbble.data.local.database.BaseDroidbbbleDatabase;
 import com.sky.droidbbble.data.model.User;
 
 import io.reactivex.Single;
@@ -16,11 +16,11 @@ import io.reactivex.SingleOnSubscribe;
 
 public class DatabaseHelper {
 
-    private DroidbbbleDatabase mDatabase = null;
+    private BaseDroidbbbleDatabase mDatabase = null;
     private static final String DATABASE_NAME = "droidbbble.db";
 
     public DatabaseHelper(Context context) {
-        mDatabase = Room.databaseBuilder(context.getApplicationContext(), DroidbbbleDatabase.class,
+        mDatabase = Room.databaseBuilder(context.getApplicationContext(), BaseDroidbbbleDatabase.class,
                 DATABASE_NAME).build();
     }
 
