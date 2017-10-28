@@ -1,7 +1,9 @@
 package com.sky.droidbbble.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,8 @@ import android.widget.FrameLayout;
 
 import com.sky.dribbble.R;
 import com.sky.droidbbble.utils.AnimUtils;
+import com.sky.droidbbble.utils.ColorUtils;
+import com.sky.droidbbble.utils.ViewUtils;
 
 import java.util.List;
 
@@ -98,9 +102,9 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
          * @param elasticOffset       Indicating the drag offset with elasticity applied i.e. may
          *                            exceed 1.
          * @param elasticOffsetPixels The elastically scaled drag distance in pixels.
-         * @param rawOffset           Value from [0, 1] indicating the raw drag offset i.e.
-         *                            without elasticity applied. A value of 1 indicates that the
-         *                            dismiss distance has been reached.
+         * @param rawOffset           Value from [0, 1] indicating the raw drag offset i.e. without
+         *                            elasticity applied. A value of 1 indicates that the dismiss
+         *                            distance has been reached.
          * @param rawOffsetPixels     The raw distance the user has dragged
          */
         void onDrag(float elasticOffset, float elasticOffsetPixels,
@@ -168,5 +172,35 @@ public class ElasticDragDismissFrameLayout extends FrameLayout {
             return;
         }
         totalDrag += scroll;
+    }
+
+    /**
+     * An {@link ElasticDragDismissCallback} which fades system chrome (i.e. status bar and
+     * navigation bar) whilst elastic drags are performed and {@link android.app.Activity#finishAfterTransition()
+     * finishes} the activity when drag dismissed.
+     */
+    public static class SystemChromeFader extends ElasticDragDismissCallback {
+
+        private final Activity mActivity;
+        private final int mStatusBarAlpha;
+        private final int mNavBarAlpha;
+        private final boolean mFadeNavBar;
+
+        public SystemChromeFader(Activity activity) {
+            mActivity = activity;
+            mStatusBarAlpha = Color.alpha(activity.getWindow().getStatusBarColor());
+            mNavBarAlpha = Color.alpha(activity.getWindow().getNavigationBarColor());
+            mFadeNavBar = ViewUtils.isNavBarOnBottom(activity);
+
+        }
+
+        @Override
+        void onDrag(float elasticOffset, float elasticOffsetPixels, float rawOffset, float rawOffsetPixels) {
+            if (elasticOffsetPixels > 0 ){
+                // dragging downward, fade the status bar in proportion
+//                mActivity.getWindow().setStatusBarColor();
+            }
+            super.onDrag(elasticOffset, elasticOffsetPixels, rawOffset, rawOffsetPixels);
+        }
     }
 }
