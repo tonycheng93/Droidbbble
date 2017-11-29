@@ -48,4 +48,9 @@ public class UserCenterActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
